@@ -1,0 +1,33 @@
+:root{
+    --background: #b1def0;
+    --white: #ebf4f7;
+    --txt: #3e4f57;
+    --shadow: #587682;
+    --shadow2: #9cb2ba;
+  }
+  
+li {
+    display: inline;
+}
+
+.navBar{
+    color: var(--txt);
+    width: 98%;
+    height: 3%;
+    top: 0px;
+    left: 0px;
+    padding: 20px;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--white);
+  }
+.navBar a{
+    padding: 22px;
+    color: var(--txt);
+  }
+  
+  .navBar a:hover{
+    color: gray;
+  } 
