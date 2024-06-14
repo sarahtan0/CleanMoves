@@ -1,14 +1,14 @@
-import { useState } from 'react'
 import './App.css'
 import {Navbar} from './components/Navbar/Navbar'
-import icon from './images/music_icon.jpg'
+import {VideoPlayer} from './components/VideoPlayer/VideoPlayer'
 
 function App() {
 
   return (
     <>
       <div>
-        <Navbar />
+        <Navbar />  
+        <VideoPlayer />
       </div>
     </>
   )
