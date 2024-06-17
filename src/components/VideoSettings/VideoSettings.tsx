@@ -4,7 +4,6 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons'
 
 // PARENT COMPONENT  
 // TODO : create start and end timestamps for loops 
-// TODO : move mirror to the videoplayer
 
 type VideoSettingsProps = {
     setURL: (url : string) => void;
@@ -17,10 +16,11 @@ type VideoSettingsProps = {
     setIsLooped: (isLooped : boolean) => void;
     countdownTime: number;
     setCountdownTime: (countdownTime: number) => void;
+    setPlay: (play : boolean) => void;
 }
 
 export function VideoSettings({setURL, setOpenModal, countdown, setCountdown, currSpeed, setCurrSpeed, isLooped, setIsLooped,
-    countdownTime, setCountdownTime} : VideoSettingsProps) {
+    countdownTime, setCountdownTime, setPlay} : VideoSettingsProps) {
 
     function countdownBox(boxElem: React.ChangeEvent<HTMLInputElement>) {
         if(boxElem.target.checked){
@@ -47,7 +47,10 @@ export function VideoSettings({setURL, setOpenModal, countdown, setCountdown, cu
                     <hr></hr>
                     <h3>YouTube Link</h3>
                     <div className={settings.section}>
-                        <input onChange={e => setURL(e.target.value)} id={settings.url} placeholder="https://www.youtube.com"></input>
+                        <input onChange={e => {
+                            setURL(e.target.value)
+                            setPlay(false)}}
+                            id={settings.url} placeholder="https://www.youtube.com"></input>
                     </div>
                     <hr></hr>
                     <div className={settings.countdown+ ' ' + settings.section}>
@@ -75,7 +78,6 @@ export function VideoSettings({setURL, setOpenModal, countdown, setCountdown, cu
                                 onClick={() => setCurrSpeed(1)}> 1 </button>
 
                         </div>
-
                         
                     </div>
                     <hr></hr>
