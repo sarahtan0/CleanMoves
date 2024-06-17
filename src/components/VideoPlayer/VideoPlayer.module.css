@@ -68,10 +68,41 @@
 }
 
 .timeline{
-    padding: 8px;
+    display: flex;
+    justify-content: center;
 }
 
-p{
+#currTime{
     color: white;
-    padding:  0 0 0 10px;
+}
+
+.timestamp{
+    text-align: center;
+    min-width: 5vw;
+}
+
+.volume{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.volSlider{
+    border-radius: 5px;
+    outline: none;
+    height: 10px;
+}
+
+.volSlider::-webkit-slider-thumb{
+    opacity: 0;
+}
+
+.volumeIcon{
+    min-width: 2vw;
+}
+
+.seeker{
+    display: flex;
+    width: 98%;
+    height: 5px;
 }

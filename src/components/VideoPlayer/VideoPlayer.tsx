@@ -3,7 +3,7 @@ import {useEffect, useRef, useState} from "react";
 import ReactPlayer from "react-player";
 import {VideoSettings} from "../VideoSettings/VideoSettings";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faGear, faPlay, faPause, faExpand} from "@fortawesome/free-solid-svg-icons"
+import {faGear, faPlay, faPause, faExpand, faVolumeLow, faVolumeMute} from "@fortawesome/free-solid-svg-icons"
 import { Timeline } from "./Timeline/Timeline";
 import YouTubePlayer from "react-player/youtube";
 import { format } from 'date-fns';
@@ -26,18 +26,24 @@ export function VideoPlayer({} : VideoProps) {
   const [inverted, setInverted] = useState(false);
   const [showTimeline, setShowTimeline] = useState(false);
   const [play, setPlay] = useState(false);
-
   const [currTime, setCurrTime] = useState(0);
-  const [currSeconds, setCurrSeconds] = useState(0);
+  const [showVolume, setShowVolume] = useState(false);
+  const [volume, setVolume] = useState(50);
+  const [isMuted, setIsMuted] = useState(false);
 
   // TODO: make the size of the container adjustable to the window dimensions
 
-  const handleProgress = (time) => {
+  const handleProgress = (time : any) => {
     setCurrTime(time.played * 100);
     console.log(play);
   }
 
-  // converts from a % of the whole video to MM:SS format
+  function seek(time : number){
+    setCurrTime(time);
+    if(videoRef.current?.getCurrentTime){
+      videoRef.current?.seekTo(time / 100, "fraction");
+    }
+  }
 
   return (
 
@@ -57,21 +63,34 @@ export function VideoPlayer({} : VideoProps) {
           playing={ play }
           onProgress={(vals) => handleProgress(vals)}
           ref={ videoRef }
+          volume={isMuted ? 0 : volume/100}
         />
       </div>
+
       {showTimeline &&
         <div className={vid.overlay} onMouseEnter={() => setShowTimeline(true)} onMouseLeave={()=>setShowTimeline(false)}>
           <div className={vid.timeline}>
-            <Timeline />
+              <input type="range" className={vid.seeker} min="0" max="100" value={currTime} onChange={(e) => seek(parseInt((e.target as HTMLInputElement).value))}/>
           </div>
           <div className={vid.inline}>
             <div>
               <button className={vid.transparentButton}>
                 <FontAwesomeIcon icon={play ? faPause : faPlay} onClick={() => setPlay(!play)}/>
               </button>
-              <p>
-                {format(new Date(currTime / 100 * videoRef.current?.getDuration() * 1000), "mm:ss")}
-              </p>
+              <div className={vid.timestamp}>
+                <p id={vid.currTime}>
+                  {format(new Date(currTime / 100 * (videoRef.current?.getDuration()??0) * 1000), "mm:ss")}
+                </p>
+              </div>
+              <div className={vid.volume + ' ' + vid.transparentButton} onMouseEnter={() => setShowVolume(true)} onMouseLeave={() => setShowVolume(false)}>
+                <div className={vid.volumeIcon} onClick={()=>setIsMuted(!isMuted)}>
+                  <FontAwesomeIcon icon={isMuted ? faVolumeMute : faVolumeLow} />
+                </div>
+                {showVolume && 
+                  <input type="range" min="0" max="100" value={volume} className={vid.volSlider} 
+                  onInput={(event)=>{setVolume(parseInt((event.target as HTMLInputElement).value))}}></input>
+                }
+              </div>
             </div>
             <div>
               <button className={vid.transparentButton + ' ' + vid.mirror + ' ' + (inverted && vid.isMirrored)} onClick={() => setInverted(!inverted)} >Mirror</button>
@@ -85,6 +104,7 @@ export function VideoPlayer({} : VideoProps) {
           </div>
         </div>
       }
+
       {openModal && 
       <div className={vid.modal}>
         <VideoSettings 
