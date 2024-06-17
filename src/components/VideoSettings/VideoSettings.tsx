@@ -1,4 +1,3 @@
-import {ChangeEvent, HtmlHTMLAttributes, useState} from "react";
 import settings from "./VideoSettings.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from '@fortawesome/free-solid-svg-icons'

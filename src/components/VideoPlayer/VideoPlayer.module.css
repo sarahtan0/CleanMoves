@@ -12,21 +12,55 @@
 
 .transparentButton {
     background-color: transparent;
+    padding: 8px;
 }
 
 .mirror{
-    color: var(--txt);
+    padding: 8px;
+    color: white;
 }
 
 .isMirrored{
     color: yellow;
 }
 
-.player{
-    place-content: center;
+.playerWrapper{
     height: 68vh;
+    width : 100%;
+    place-content: center;
     overflow: hidden;
     display: flex;
     justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+}
+
+.inline{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 10px;
+}
+
+.container{
+    position: relative;
+}
+
+.overlay{
+    background: rgba(0, 0, 0, 0.4);
+    position: absolute;
+    width: 100%;
+    bottom: 0px;
+    z-index: 2;
+    border-radius: 0px 0px 10px 10px;
+}
+
+.modal{
+    position: absolute;
+    z-index: 10;
+}
+
+.inline > div{
+    display: flex;
     align-items: center;
 }
