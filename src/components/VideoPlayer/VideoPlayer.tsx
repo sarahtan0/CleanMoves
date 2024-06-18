@@ -25,7 +25,8 @@ export function VideoPlayer({} : VideoProps) {
   const [countdownTime, setCountdownTime] = useState(0);
   const [inverted, setInverted] = useState(false);
   const [showTimeline, setShowTimeline] = useState(false);
-  const [play, setPlay] = useState(false);
+  const [playing, setPlaying] = useState(false);
+  // time is as a % of total video completed (ex: 10 = 10% of video is watched)
   const [currTime, setCurrTime] = useState(0);
   const [showVolume, setShowVolume] = useState(false);
   const [volume, setVolume] = useState(50);
@@ -33,20 +34,80 @@ export function VideoPlayer({} : VideoProps) {
   const timeoutRef = useRef<number | null> (null);
   const [isFullScreen, setIsFullScreen] = useState(false);
 
-  // TODO: make the size of the container adjustable to the window dimensions
-
-  const toggleFullScreen = () => {
-    const element = document.getElementById("container");
-    !isFullScreen ? element?.requestFullscreen() : document.exitFullscreen();
-  }
-
   const handleProgress = (time : any) => {
     setCurrTime(time.played * 100);
   }
 
+  // changes isFullScreen when user presses escape from fullscreen mode
+  useEffect(() => {
+    const onFullScreenChange = () => document.fullscreenElement ? setIsFullScreen(true) : setIsFullScreen(false);
+
+    document.addEventListener("fullscreenchange", onFullScreenChange);
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", onFullScreenChange);
+      document.removeEventListener("keydown", handleKeyDown);
+    }
+  }, [])
+
+  const handleKeyDown = (event: KeyboardEvent) => {
+    let seekTime = 5 / (videoRef.current?.getDuration() ?? 1) * 100;
+    switch(event.key){
+      case " ":
+        event.preventDefault();
+        setPlaying(prevPlay => !prevPlay);
+        break;
+        // you have to seek inside setCurrTime because state updates are put in a queue, so calling seek outside doesn't ensure it uses the most recent val
+      case "ArrowLeft":
+        setCurrTime(prev => {
+          const newTime = prev - seekTime;
+          seek(newTime);
+          return newTime;
+        });
+        break;
+      case "ArrowRight":
+        setCurrTime(prev => {
+          const newTime = prev + seekTime;
+          seek(newTime);
+          // returns the value it will seek to
+          return newTime;
+        })
+        break;
+      case "s":
+        setOpenModal(prevModal => !prevModal);
+        break;
+      case "f":
+        setIsFullScreen(prev => !prev);
+        console.log(isFullScreen);
+        toggleFullScreen();
+        break;
+      case "r":
+        setInverted(prev => !prev);
+        break;
+      case "m":
+        setIsMuted(prev => !prev);
+        break;
+      default:
+        break;
+    }
+  }
+
+  const toggleFullScreen = () => {
+    if(document.fullscreenElement){
+      setIsFullScreen(false);
+      document.exitFullscreen();
+    } else {
+      const element = document.getElementById("container");
+      element?.requestFullscreen();
+      setIsFullScreen(true);
+    }
+  }
+
+  // seeks to that % of the video
   function seek(time : number){
-    setCurrTime(time);
-    if(videoRef.current?.getCurrentTime){
+    if(videoRef.current && videoRef.current?.seekTo){
+      setCurrTime(time);
       videoRef.current?.seekTo(time / 100, "fraction");
     }
   }
@@ -72,19 +133,19 @@ export function VideoPlayer({} : VideoProps) {
       <div className={vid.playerWrapper + ' ' + (inverted && vid.invert) + ' ' + (isFullScreen && vid.fullscreen)} 
         onMouseMove={()=> handleMouseHover()} 
         onMouseLeave={()=>setShowTimeline(false)}
-        onClick={()=>setPlay(!play)}>
+        onClick={()=>setPlaying(!playing)}>
         
         <ReactPlayer 
-          onReady={() => setPlay(false)}
+          onReady={() => setPlaying(false)}
           className={vid.player}
           url = {url}
           controls={ false }
-          width= {isFullScreen ? "100vw" : 1080}
-          height={isFullScreen ? "150vh" : 1080}
+          width= {isFullScreen ? "100vw" : "66vw"}
+          height={"150vh"}
           playbackRate={currSpeed}
           light={ false } 
           style={{ pointerEvents: "none" }}
-          playing={ play }
+          playing={ playing }
           onProgress={(vals) => handleProgress(vals)}
           ref={ videoRef }
           volume={isMuted ? 0 : volume/100}
@@ -99,7 +160,7 @@ export function VideoPlayer({} : VideoProps) {
           <div className={controls.inline}>
             <div>
               <button className={vid.transparentButton + ' ' + controls.playButton}>
-                <FontAwesomeIcon icon={play ? faPause : faPlay} onClick={() => setPlay(!play)}/>
+                <FontAwesomeIcon icon={playing ? faPause : faPlay} onClick={() => setPlaying(prevPlay => !prevPlay)}/>
               </button>
               <div className={vid.timestamp}>
                 <p id={vid.currTime}>
@@ -147,7 +208,8 @@ export function VideoPlayer({} : VideoProps) {
           setIsLooped={setIsLooped}
           countdownTime={countdownTime}
           setCountdownTime={setCountdownTime}
-          setPlay={setPlay}
+          setPlay={setPlaying}
+          isFullScreen={isFullScreen}
         />
       </div>
       }

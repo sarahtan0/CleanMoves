@@ -17,10 +17,11 @@ type VideoSettingsProps = {
     countdownTime: number;
     setCountdownTime: (countdownTime: number) => void;
     setPlay: (play : boolean) => void;
+    isFullScreen : boolean;
 }
 
 export function VideoSettings({setURL, setOpenModal, countdown, setCountdown, currSpeed, setCurrSpeed, isLooped, setIsLooped,
-    countdownTime, setCountdownTime, setPlay} : VideoSettingsProps) {
+    countdownTime, setCountdownTime, setPlay, isFullScreen} : VideoSettingsProps) {
 
     function countdownBox(boxElem: React.ChangeEvent<HTMLInputElement>) {
         if(boxElem.target.checked){
@@ -35,7 +36,7 @@ export function VideoSettings({setURL, setOpenModal, countdown, setCountdown, cu
     }
 
     return (
-        <div className={settings.background}>
+        <div className={settings.background + ' ' + (isFullScreen && settings.fullscreen)}>
             <div className={settings.container}>
                 <div className={settings.title}>
                     <h2>Settings</h2>
