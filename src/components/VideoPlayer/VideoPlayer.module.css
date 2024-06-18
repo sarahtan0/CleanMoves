@@ -55,8 +55,6 @@
     z-index: 10;
 }
 
-
-
 #currTime{
     color: white;
 }
@@ -64,4 +62,11 @@
 .timestamp{
     text-align: center;
     min-width: 5vw;
+}
+
+.fullscreen{
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    border-radius: 0;
 }

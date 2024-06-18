@@ -4,7 +4,7 @@ import {useEffect, useRef, useState} from "react";
 import ReactPlayer from "react-player";
 import {VideoSettings} from "../VideoSettings/VideoSettings";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faGear, faPlay, faPause, faExpand, faVolumeLow, faVolumeMute} from "@fortawesome/free-solid-svg-icons"
+import {faGear, faPlay, faPause, faExpand, faVolumeLow, faVolumeMute, faCompress} from "@fortawesome/free-solid-svg-icons"
 // import ReactPlayer from "react-player/youtube";
 import { format } from 'date-fns';
 
@@ -31,8 +31,14 @@ export function VideoPlayer({} : VideoProps) {
   const [volume, setVolume] = useState(50);
   const [isMuted, setIsMuted] = useState(false);
   const timeoutRef = useRef<number | null> (null);
+  const [isFullScreen, setIsFullScreen] = useState(false);
 
   // TODO: make the size of the container adjustable to the window dimensions
+
+  const toggleFullScreen = () => {
+    const element = document.getElementById("container");
+    !isFullScreen ? element?.requestFullscreen() : document.exitFullscreen();
+  }
 
   const handleProgress = (time : any) => {
     setCurrTime(time.played * 100);
@@ -54,6 +60,7 @@ export function VideoPlayer({} : VideoProps) {
       clearTimeout(timeoutRef.current);
     }
 
+    // waits 3 seconds before hiding the controls again
     timeoutRef.current = setTimeout(() => {
         setShowTimeline(false);
       }, 3000);
@@ -61,8 +68,8 @@ export function VideoPlayer({} : VideoProps) {
 
   return (
 
-    <div className={vid.container} ref={playerRef}>
-      <div className={vid.playerWrapper + ' ' + (inverted && vid.invert)} 
+    <div className={vid.container} ref={playerRef} id="container">
+      <div className={vid.playerWrapper + ' ' + (inverted && vid.invert) + ' ' + (isFullScreen && vid.fullscreen)} 
         onMouseMove={()=> handleMouseHover()} 
         onMouseLeave={()=>setShowTimeline(false)}
         onClick={()=>setPlay(!play)}>
@@ -72,8 +79,8 @@ export function VideoPlayer({} : VideoProps) {
           className={vid.player}
           url = {url}
           controls={ false }
-          width= {1080}
-          height={ 1080 }
+          width= {isFullScreen ? "100vw" : 1080}
+          height={isFullScreen ? "150vh" : 1080}
           playbackRate={currSpeed}
           light={ false } 
           style={{ pointerEvents: "none" }}
@@ -84,7 +91,7 @@ export function VideoPlayer({} : VideoProps) {
         />
       </div>
 
-      {showTimeline &&
+      {showTimeline && 
         <div className={vid.overlay} onMouseEnter={()=> setShowTimeline(true)} >
           <div className={controls.timeline}>
               <input type="range" className={controls.seeker} min="0" max="100" value={currTime} onChange={(e) => seek(parseInt((e.target as HTMLInputElement).value))}/>
@@ -116,8 +123,11 @@ export function VideoPlayer({} : VideoProps) {
               <button className={vid.transparentButton} onClick={() => setOpenModal(!openModal)}>
                 <FontAwesomeIcon icon={faGear}/>
               </button> 
-              <button className={vid.transparentButton}>
-                <FontAwesomeIcon icon={faExpand}/>
+              <button className={vid.transparentButton} 
+                onClick={() => {
+                  setIsFullScreen(!isFullScreen)
+                  toggleFullScreen()}}>
+                <FontAwesomeIcon icon={!isFullScreen ? faExpand : faCompress}/>
               </button>
             </div>
           </div>
