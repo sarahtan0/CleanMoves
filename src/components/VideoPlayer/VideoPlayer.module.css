@@ -84,25 +84,24 @@
 .volume{
     display: flex;
     align-items: center;
-    gap: 10px;
 }
 
 .volSlider{
-    border-radius: 5px;
     outline: none;
     height: 10px;
 }
 
-.volSlider::-webkit-slider-thumb{
-    opacity: 0;
-}
-
 .volumeIcon{
     min-width: 2vw;
+    padding: 0 10px ;
 }
 
 .seeker{
     display: flex;
     width: 98%;
     height: 5px;
+}
+
+.playButton{
+    min-width: 2vw;
 }

@@ -4,8 +4,7 @@ import ReactPlayer from "react-player";
 import {VideoSettings} from "../VideoSettings/VideoSettings";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faGear, faPlay, faPause, faExpand, faVolumeLow, faVolumeMute} from "@fortawesome/free-solid-svg-icons"
-import { Timeline } from "./Timeline/Timeline";
-import YouTubePlayer from "react-player/youtube";
+// import ReactPlayer from "react-player/youtube";
 import { format } from 'date-fns';
 
 type VideoProps={
@@ -15,7 +14,7 @@ export function VideoPlayer({} : VideoProps) {
   const BASEURL = "https://www.youtube.com/watch?v=cDQdR6i4W9o&list=PLcZxoPUYVQX2t6dT6PsSLo1j0Xbv7UBbd";
 
   const playerRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<YouTubePlayer>(null);
+  const videoRef = useRef<ReactPlayer>(null);
 
   const [url, setURL] = useState(BASEURL);
   const [openModal, setOpenModal] = useState(false);
@@ -30,12 +29,12 @@ export function VideoPlayer({} : VideoProps) {
   const [showVolume, setShowVolume] = useState(false);
   const [volume, setVolume] = useState(50);
   const [isMuted, setIsMuted] = useState(false);
+  const timeoutRef = useRef<number | null> (null);
 
   // TODO: make the size of the container adjustable to the window dimensions
 
   const handleProgress = (time : any) => {
     setCurrTime(time.played * 100);
-    console.log(play);
   }
 
   function seek(time : number){
@@ -45,17 +44,31 @@ export function VideoPlayer({} : VideoProps) {
     }
   }
 
+  const handleMouseHover = () => {
+    setShowTimeline(true);
+
+    // checks if there's an existing timeoutRef (a previous mouse movement in the player div)
+    // replaces it so there's no overlapping refs and the setTimeout function doesn't stack
+    if(timeoutRef.current){
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = setTimeout(() => {
+        setShowTimeline(false);
+      }, 3000);
+  }
+
   return (
 
     <div className={vid.container} ref={playerRef}>
-      <div className={vid.playerWrapper + ' ' + (inverted && vid.invert)} onMouseEnter={()=>setShowTimeline(true)} onMouseLeave={()=>setShowTimeline(false)}
+      <div className={vid.playerWrapper + ' ' + (inverted && vid.invert)} onMouseMove={()=> handleMouseHover()} onMouseLeave={()=>setShowTimeline(true)}
         onClick={()=>setPlay(!play)}>
         <ReactPlayer 
           onReady={() => setPlay(false)}
           className={vid.player}
           url = {url}
           controls={ false }
-          width={ 1080 }
+          width= {1080}
           height={ 1080 }
           playbackRate={currSpeed}
           light={ false } 
@@ -68,22 +81,24 @@ export function VideoPlayer({} : VideoProps) {
       </div>
 
       {showTimeline &&
-        <div className={vid.overlay} onMouseEnter={() => setShowTimeline(true)} onMouseLeave={()=>setShowTimeline(false)}>
+        <div className={vid.overlay} onMouseEnter={()=> setShowTimeline(true)} >
           <div className={vid.timeline}>
               <input type="range" className={vid.seeker} min="0" max="100" value={currTime} onChange={(e) => seek(parseInt((e.target as HTMLInputElement).value))}/>
           </div>
           <div className={vid.inline}>
             <div>
-              <button className={vid.transparentButton}>
+              <button className={vid.transparentButton + ' ' + vid.playButton}>
                 <FontAwesomeIcon icon={play ? faPause : faPlay} onClick={() => setPlay(!play)}/>
               </button>
               <div className={vid.timestamp}>
                 <p id={vid.currTime}>
                   {format(new Date(currTime / 100 * (videoRef.current?.getDuration()??0) * 1000), "mm:ss")}
+                  {" / "}
+                  {format(new Date((videoRef.current?.getDuration()??0) * 1000), "mm:ss")}
                 </p>
               </div>
-              <div className={vid.volume + ' ' + vid.transparentButton} onMouseEnter={() => setShowVolume(true)} onMouseLeave={() => setShowVolume(false)}>
-                <div className={vid.volumeIcon} onClick={()=>setIsMuted(!isMuted)}>
+              <div className={vid.volume} onMouseEnter={() => setShowVolume(true)} onMouseLeave={() => setShowVolume(false)}>
+                <div className={vid.volumeIcon} style={{color: "white"}} onClick={()=>setIsMuted(!isMuted)}>
                   <FontAwesomeIcon icon={isMuted ? faVolumeMute : faVolumeLow} />
                 </div>
                 {showVolume && 
