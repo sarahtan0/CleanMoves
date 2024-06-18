@@ -1,4 +1,5 @@
 import vid from './VideoPlayer.module.css'
+import controls from './Controls.module.css';
 import {useEffect, useRef, useState} from "react";
 import ReactPlayer from "react-player";
 import {VideoSettings} from "../VideoSettings/VideoSettings";
@@ -61,8 +62,11 @@ export function VideoPlayer({} : VideoProps) {
   return (
 
     <div className={vid.container} ref={playerRef}>
-      <div className={vid.playerWrapper + ' ' + (inverted && vid.invert)} onMouseMove={()=> handleMouseHover()} onMouseLeave={()=>setShowTimeline(true)}
+      <div className={vid.playerWrapper + ' ' + (inverted && vid.invert)} 
+        onMouseMove={()=> handleMouseHover()} 
+        onMouseLeave={()=>setShowTimeline(false)}
         onClick={()=>setPlay(!play)}>
+        
         <ReactPlayer 
           onReady={() => setPlay(false)}
           className={vid.player}
@@ -82,12 +86,12 @@ export function VideoPlayer({} : VideoProps) {
 
       {showTimeline &&
         <div className={vid.overlay} onMouseEnter={()=> setShowTimeline(true)} >
-          <div className={vid.timeline}>
-              <input type="range" className={vid.seeker} min="0" max="100" value={currTime} onChange={(e) => seek(parseInt((e.target as HTMLInputElement).value))}/>
+          <div className={controls.timeline}>
+              <input type="range" className={controls.seeker} min="0" max="100" value={currTime} onChange={(e) => seek(parseInt((e.target as HTMLInputElement).value))}/>
           </div>
-          <div className={vid.inline}>
+          <div className={controls.inline}>
             <div>
-              <button className={vid.transparentButton + ' ' + vid.playButton}>
+              <button className={vid.transparentButton + ' ' + controls.playButton}>
                 <FontAwesomeIcon icon={play ? faPause : faPlay} onClick={() => setPlay(!play)}/>
               </button>
               <div className={vid.timestamp}>
@@ -97,12 +101,12 @@ export function VideoPlayer({} : VideoProps) {
                   {format(new Date((videoRef.current?.getDuration()??0) * 1000), "mm:ss")}
                 </p>
               </div>
-              <div className={vid.volume} onMouseEnter={() => setShowVolume(true)} onMouseLeave={() => setShowVolume(false)}>
-                <div className={vid.volumeIcon} style={{color: "white"}} onClick={()=>setIsMuted(!isMuted)}>
+              <div className={controls.volume} onMouseEnter={() => setShowVolume(true)} onMouseLeave={() => setShowVolume(false)}>
+                <div className={controls.volumeIcon} style={{color: "white"}} onClick={()=>setIsMuted(!isMuted)}>
                   <FontAwesomeIcon icon={isMuted ? faVolumeMute : faVolumeLow} />
                 </div>
                 {showVolume && 
-                  <input type="range" min="0" max="100" value={volume} className={vid.volSlider} 
+                  <input type="range" min="0" max="100" value={volume} className={controls.volSlider} 
                   onInput={(event)=>{setVolume(parseInt((event.target as HTMLInputElement).value))}}></input>
                 }
               </div>
