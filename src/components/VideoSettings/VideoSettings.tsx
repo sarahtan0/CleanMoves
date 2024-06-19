@@ -3,6 +3,8 @@ import { Dispatch, SetStateAction, useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark, faBookmark } from '@fortawesome/free-solid-svg-icons'
 import metronome from "./metronome.mp3";
+import Slider from "@mui/material/Slider";
+import Box from "@mui/material/Box";
 
 type VideoSettingsProps = {
     setURL: (url : string) => void;
@@ -201,10 +203,23 @@ export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, is
                                 <p>seek by {seekSeconds} seconds</p>
                             </div>
                             <div className={settings.center}>
-                                <input className={settings.slider} type="range" min="1" max="10" name="seekSeconds" value={seekSeconds}
-                                    onChange={(e) => {
-                                        setSeekSeconds(() => parseInt((e.target as HTMLInputElement).value));
-                                    }}/>
+                                <Box width={200} display="flex" alignItems="center">
+                                    <Slider max={10} min={0} aria-label="Volume" value={seekSeconds} onChange={(e) => {
+                                        setSeekSeconds(parseInt((e.target as HTMLInputElement).value));}} 
+                                    sx={{
+                                        color: '#FFFFFF',
+                                        '& .MuiSlider-track': {
+                                          border: 'none',
+                                          color: '#9cb2ba'
+                                        },
+                                        '& .MuiSlider-thumb': {
+                                          color: '#FFFFFF', 
+                                        },
+                                        '& .MuiSlider-rail': {
+                                          color: '#CCCCCC', 
+                                        },
+                                      }}/>
+                                </Box>
                             </div>
                         </div>
                     </div>

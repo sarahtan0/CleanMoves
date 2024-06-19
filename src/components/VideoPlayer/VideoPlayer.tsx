@@ -7,6 +7,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faGear, faPlay, faPause, faExpand, faVolumeLow, faVolumeMute, faCompress, faVolumeHigh} from "@fortawesome/free-solid-svg-icons"
 // import ReactPlayer from "react-player/youtube";
 import { format } from 'date-fns';
+import Slider from "@mui/material/Slider";
+import Box from "@mui/material/Box";
 
 export function VideoPlayer({}){
 
@@ -231,8 +233,24 @@ export function VideoPlayer({}){
       {showTimeline && 
         <div className={vid.overlay} onMouseEnter={()=> setShowTimeline(true)} onMouseLeave={() => {setShowTimeline(false); setShowVolume(false);}}>
           <div className={controls.timeline}>
-              <input type="range" className={controls.seeker} min="0" max="100" value={currTime} onChange={(e) => seek(parseInt((e.target as HTMLInputElement).value))}/>
-              <div className={controls.progress} style={{width: currTime/1.02 + "%"}}></div>
+            <Box width="98%" display="flex" alignItems="center">
+              <Slider min={0} max={100} value={currTime} onChange={(e) => seek(parseInt((e.target as HTMLInputElement).value))}
+              sx={{
+                color: '#FFFFFF',
+                '& .MuiSlider-track': {
+                  border: 'none',
+                  color: '#FFFFFF'
+                },
+                '& .MuiSlider-thumb': {
+                  color: '#FFFFFF', 
+                  width: 15,
+                  height: 15
+                },
+                '& .MuiSlider-rail': {
+                  color: '#545454', 
+                },
+              }}></Slider>
+            </Box>
           </div>
           <div className={controls.inline}>
             <div>
@@ -251,10 +269,24 @@ export function VideoPlayer({}){
                   <FontAwesomeIcon icon={volumeIcon()}/>
                 </div>
                 {showVolume && 
-                  <div style={{width: "100%"}}>
-                    <input type="range" min="0" max="100" value={volume} className={controls.volSlider} 
-                    onInput={(event)=>{setVolume(parseInt((event.target as HTMLInputElement).value))}}></input>
-                  </div>
+                  <Box width={90} display="flex" alignItems="center">
+                    <Slider min={0} max={100} value={volume} onChange={(event)=>{setVolume(parseInt((event.target as HTMLInputElement).value))}}
+                      sx={{
+                        color: '#FFFFFF',
+                        '& .MuiSlider-track': {
+                          border: 'none',
+                          color: '#FFFFFF'
+                        },
+                        '& .MuiSlider-thumb': {
+                          color: '#FFFFFF', 
+                          width: 15,
+                          height: 15
+                        },
+                        '& .MuiSlider-rail': {
+                          color: '#545454', 
+                        },
+                      }}/>
+                  </Box>
                 }
               </div>
             </div>
