@@ -105,6 +105,14 @@ export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, is
         return convertedTime;
     }
 
+    const doubleDigit = (val : number) => {
+        if (val >= 10){
+            return val;
+        } else {
+            return '0' + val;
+        }
+    }
+
     return (
         <div className={settings.background + ' ' + (isFullScreen && settings.fullscreen)}>
             <div className={settings.container}>
@@ -164,9 +172,9 @@ export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, is
                                     </button>
                                 </div>
                                 <div>
-                                    <input type="number" className={settings.timeInput} value={startMin} placeholder="00" max="60" min="00"></input>
+                                    <input type="number" className={settings.timeInput} value={doubleDigit(startMin)} placeholder="00" max="60" min="00"></input>
                                     :
-                                    <input type="number" className={settings.timeInput} value={startSec} placeholder="00" max="60" min="0" 
+                                    <input type="number" className={settings.timeInput} value={doubleDigit(startSec)} placeholder="00" max="60" min="0" 
                                     onChange={() => convertToStart(currTime)}></input>
                                 </div>
                             </div>
@@ -178,9 +186,9 @@ export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, is
                                     </button>
                                 </div>
                                 <div>
-                                    <input type="number" className={settings.timeInput} value={endMin} placeholder="60" max="60" min="0"></input>
+                                    <input type="number" className={settings.timeInput} value={doubleDigit(endMin)} placeholder="60" max="60" min="0"></input>
                                     :
-                                    <input type="number" className={settings.timeInput} value={endSec} placeholder="60" max="60" min="0"></input>
+                                    <input type="number" className={settings.timeInput} value={doubleDigit(endSec)} placeholder="60" max="60" min="0"></input>
                                 </div>
                             </div>
                         </div>
