@@ -48,8 +48,7 @@ export function VideoPlayer({}){
   }
 
   const handleProgress = (time : any) => {
-
-      if(time.played > convertSeconds(endSeconds)/100){
+      if(isLooped && time.played > convertSeconds(endSeconds)/100){
         setCurrTime(() => {
           let startTime = convertSeconds(startSeconds);
           seek(startTime);
