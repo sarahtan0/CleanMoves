@@ -175,3 +175,7 @@ hr{
 .selected{
     background-color: var(--highlight);
 }
+
+button{
+    outline-color: var(--shadow2);
+}

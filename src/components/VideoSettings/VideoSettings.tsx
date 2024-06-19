@@ -1,38 +1,50 @@
 import settings from "./VideoSettings.module.css";
+import { Dispatch, SetStateAction } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
-
-// PARENT COMPONENT  
-// TODO : create start and end timestamps for loops 
+import metronome from "./metronome.mp3";
 
 type VideoSettingsProps = {
     setURL: (url : string) => void;
-    setOpenModal: (openModal : boolean) => void;
-    countdown: boolean;
-    setCountdown: (countdown : boolean) => void;
+    setOpenModal: Dispatch<SetStateAction<boolean>>;
     currSpeed: number;
-    setCurrSpeed: (currSpeed : number) => void;
+    setCurrSpeed: Dispatch<SetStateAction<number>>;
     isLooped: boolean;
-    setIsLooped: (isLooped : boolean) => void;
+    setIsLooped: Dispatch<SetStateAction<boolean>>;
     countdownTime: number;
-    setCountdownTime: (countdownTime: number) => void;
+    setCountdownTime: Dispatch<SetStateAction<number>>;
     setPlay: (play : boolean) => void;
     isFullScreen : boolean;
+    isCountingDown : boolean;
+    setIsCountingDown: Dispatch<SetStateAction<boolean>>;
 }
 
-export function VideoSettings({setURL, setOpenModal, countdown, setCountdown, currSpeed, setCurrSpeed, isLooped, setIsLooped,
+export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, isLooped, setIsLooped,
     countdownTime, setCountdownTime, setPlay, isFullScreen} : VideoSettingsProps) {
-
-    function countdownBox(boxElem: React.ChangeEvent<HTMLInputElement>) {
-        if(boxElem.target.checked){
-            setCountdown(true);
-        } else {
-            setCountdown(false);
-        }
-    }
+    
+    const tick = new Audio(metronome);
 
     function compareSpeed (checkSpeed : number) {
         return currSpeed == checkSpeed;
+    }
+
+    function countingDown() {
+        const sound = (delay: number) => {
+            setTimeout(() => {
+              tick.play();
+            }, delay);
+          };
+        if(countdownTime > 0){
+            setPlay(false);
+            for (let i = 0; i < countdownTime; i++) {
+                sound(i * 1000);
+                if (i === countdownTime - 1) {
+                setTimeout(() => {
+                    setPlay(true);
+                }, 1000 * countdownTime);
+                }
+            }
+        }
     }
 
     return (
@@ -56,10 +68,9 @@ export function VideoSettings({setURL, setOpenModal, countdown, setCountdown, cu
                     <hr></hr>
                     <div className={settings.countdown+ ' ' + settings.section}>
                         <div>
-                            <input type="checkbox" name="countdown" checked={countdown} onChange={(e) => countdownBox(e)}></input>
-                            <label htmlFor="countdown" style={{fontWeight: "bold"}}> Countdown</label>
+                            <button onClick={()=> countingDown(countdownTime)}>Start Countdown</button>
                         </div>
-                        <div className={(!countdown && settings.grayed)+ ' ' + settings.seconds}>
+                        <div className={settings.seconds}>
                             <input type="number" name="seconds" min="0" max="10" value={countdownTime} 
                                 onChange={(e) => setCountdownTime(parseInt(e.target.value))}></input>
                             <label htmlFor="seconds"> seconds </label> 
