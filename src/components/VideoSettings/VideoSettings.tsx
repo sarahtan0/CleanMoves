@@ -41,6 +41,7 @@ export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, is
     const minRef = useRef(0);
     const secRef = useRef(0);
     const endRef = useRef(0);
+    const startRef = useRef(0);
     
     const tick = new Audio(metronome);
 
@@ -69,9 +70,20 @@ export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, is
         }
     }
 
-    // useEffect(() => {
-    //     endRef.current = endTime;
-    //   }, [endTime]);
+    const convertToStart = (time : number) => {
+        let seconds = time / 100 * duration;
+        let min = Math.trunc(seconds/60);
+        let sec = Math.trunc(seconds % 60);
+        let startStamp = convertFromStamps(min, sec);
+
+        minRef.current = min;
+        secRef.current = sec;
+        startRef.current = startStamp;
+
+        setStartMin(min);
+        setStartSec(sec);
+        setStartTime(startStamp);
+    }
 
     const convertToEnd = (time : number) => {
         let seconds = time / 100 * duration;
@@ -82,7 +94,7 @@ export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, is
         minRef.current = min;
         secRef.current = sec;
         endRef.current = endStamp;
-
+        
         setEndMin(min);
         setEndSec(sec);
         setEndTime(endStamp);
@@ -147,26 +159,15 @@ export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, is
                             <div className={settings.start}>
                                 <div className={settings.center + ' ' + settings.gap}>
                                     <p>Start</p>
-                                    <button className={settings.transparentButton}>
+                                    <button className={settings.transparentButton} onClick={() => convertToStart(currTime)}>
                                         <FontAwesomeIcon icon={faBookmark}/>
                                     </button>
                                 </div>
                                 <div>
-                                    <input type="number" className={settings.timeInput} value={startMin} placeholder="00" max="60" min="00" 
-                                       onChange={(e) => {
-                                        setStartMin(() => {
-                                            let newMin = parseInt((e.target as HTMLInputElement).value);
-                                            setStartTime(convertFromStamps(newMin, startSec));
-                                            return newMin});
-                                       }} ></input>
+                                    <input type="number" className={settings.timeInput} value={startMin} placeholder="00" max="60" min="00"></input>
                                     :
                                     <input type="number" className={settings.timeInput} value={startSec} placeholder="00" max="60" min="0" 
-                                    onChange={(e) => {
-                                        setStartSec(() => {
-                                            let newSec = parseInt((e.target as HTMLInputElement).value);
-                                            setStartTime(convertFromStamps(startMin, newSec));
-                                            return newSec});
-                                       }}></input>
+                                    onChange={() => convertToStart(currTime)}></input>
                                 </div>
                             </div>
                             <div className={settings.end}>
@@ -179,13 +180,7 @@ export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, is
                                 <div>
                                     <input type="number" className={settings.timeInput} value={endMin} placeholder="60" max="60" min="0"></input>
                                     :
-                                    <input type="number" className={settings.timeInput} value={endSec} placeholder="60" max="60" min="0"
-                                    onChange={(e) => {
-                                        setEndSec(() => {
-                                            let newSec = parseInt((e.target as HTMLInputElement).value);
-                                            setEndTime(convertFromStamps(endMin, newSec));
-                                            return newSec});
-                                       }}></input>
+                                    <input type="number" className={settings.timeInput} value={endSec} placeholder="60" max="60" min="0"></input>
                                 </div>
                             </div>
                         </div>

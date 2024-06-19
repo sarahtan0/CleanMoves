@@ -40,8 +40,7 @@ export function VideoPlayer({}){
   const [startMin, setStartMin] = useState(0);
   const [startSec, setStartSec] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [endSeconds, setEndSeconds] = useState(duration ?? 0);
-  const endSecondsRef = useRef(endSeconds);
+  const [endSeconds, setEndSeconds] = useState(videoRef.current?.getDuration() ?? 0);
 
   const [seekSeconds, setSeekSeconds] = useState(5);
   const seekSecondsRef = useRef(seekSeconds);
@@ -74,7 +73,6 @@ export function VideoPlayer({}){
         // ensures that the new seekSeconds value is updated properly and there's no lag (because it's introducing a new value each time)
         // wouldn't need to do this if it modified the previous value
         seekSecondsRef.current = seekSeconds;
-        endSecondsRef.current = duration;
 
       return () => {
         document.removeEventListener("fullscreenchange", onFullScreenChange);
@@ -200,18 +198,25 @@ export function VideoPlayer({}){
     <div className={vid.container} ref={playerRef} id="container">
       <div className={vid.playerWrapper + ' ' + (inverted && vid.invert) + ' ' + (isFullScreen && vid.fullscreen)} 
         onMouseMove={()=> handleMouseHover()} 
-        onMouseLeave={()=>setShowTimeline(false)}
+        onMouseLeave={()=>{
+          setShowTimeline(false);
+          setShowVolume(false);
+        }}
         onClick={()=>setPlaying(!playing)}>
         
         <ReactPlayer 
           onReady={() => {
+            let dur = videoRef.current?.getDuration() ?? 0;
             setPlaying(false);
-            setDuration(videoRef.current?.getDuration() ?? 0);
+            setDuration(dur);
+            setEndSeconds(dur);
+            setEndMin(Math.trunc(dur/60));
+            setEndSec(Math.trunc(dur%60));
           }}
           className={vid.player}
           url = {url}
           controls={ false }
-          width= {isFullScreen ? "100vw" : "66vw"}
+          width= {isFullScreen ? "100vw" : "68vw"}
           height={"150vh"}
           playbackRate={currSpeed}
           light={ false } 
@@ -224,9 +229,10 @@ export function VideoPlayer({}){
       </div>
 
       {showTimeline && 
-        <div className={vid.overlay} onMouseEnter={()=> setShowTimeline(true)} onMouseLeave={() => setShowTimeline(false)}>
+        <div className={vid.overlay} onMouseEnter={()=> setShowTimeline(true)} onMouseLeave={() => {setShowTimeline(false); setShowVolume(false);}}>
           <div className={controls.timeline}>
               <input type="range" className={controls.seeker} min="0" max="100" value={currTime} onChange={(e) => seek(parseInt((e.target as HTMLInputElement).value))}/>
+              <div className={controls.progress} style={{width: currTime/1.02 + "%"}}></div>
           </div>
           <div className={controls.inline}>
             <div>
@@ -240,13 +246,15 @@ export function VideoPlayer({}){
                   {format(new Date((videoRef.current?.getDuration()??0) * 1000), "mm:ss")}
                 </p>
               </div>
-              <div className={controls.volume} onMouseEnter={() => setShowVolume(true)} onMouseLeave={() => setShowVolume(false)}>
+              <div className={controls.volume} onMouseEnter={() => setShowVolume(true)}>
                 <div className={controls.volumeIcon} style={{color: "white"}} onClick={()=>setIsMuted(!isMuted)}>
-                  <FontAwesomeIcon icon={volumeIcon()} />
+                  <FontAwesomeIcon icon={volumeIcon()}/>
                 </div>
                 {showVolume && 
-                  <input type="range" min="0" max="100" value={volume} className={controls.volSlider} 
-                  onInput={(event)=>{setVolume(parseInt((event.target as HTMLInputElement).value))}}></input>
+                  <div style={{width: "100%"}}>
+                    <input type="range" min="0" max="100" value={volume} className={controls.volSlider} 
+                    onInput={(event)=>{setVolume(parseInt((event.target as HTMLInputElement).value))}}></input>
+                  </div>
                 }
               </div>
             </div>
