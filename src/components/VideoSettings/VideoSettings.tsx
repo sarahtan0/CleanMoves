@@ -1,5 +1,5 @@
 import settings from "./VideoSettings.module.css";
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import metronome from "./metronome.mp3";
@@ -17,10 +17,21 @@ type VideoSettingsProps = {
     isFullScreen : boolean;
     isCountingDown : boolean;
     setIsCountingDown: Dispatch<SetStateAction<boolean>>;
+    setEndTime : Dispatch<SetStateAction<number>>;
+    setStartTime : Dispatch<SetStateAction<number>>;
+    startMin : number;
+    startSec : number;
+    endMin : number;
+    endSec : number;
+    setStartMin : Dispatch<SetStateAction<number>>;
+    setStartSec : Dispatch<SetStateAction<number>>;
+    setEndMin : Dispatch<SetStateAction<number>>;
+    setEndSec : Dispatch<SetStateAction<number>>;
 }
 
 export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, isLooped, setIsLooped,
-    countdownTime, setCountdownTime, setPlay, isFullScreen} : VideoSettingsProps) {
+    countdownTime, setCountdownTime, setPlay, isFullScreen, setEndTime, setStartTime, startMin, startSec, endMin, endSec, setStartMin, setStartSec,
+    setEndMin, setEndSec} : VideoSettingsProps) {
     
     const tick = new Audio(metronome);
 
@@ -47,6 +58,11 @@ export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, is
         }
     }
 
+    const convertStamps = (min : number, sec : number) => {
+        let convertedTime = (min * 60) + sec;
+        return convertedTime;
+    }
+
     return (
         <div className={settings.background + ' ' + (isFullScreen && settings.fullscreen)}>
             <div className={settings.container}>
@@ -68,7 +84,7 @@ export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, is
                     <hr></hr>
                     <div className={settings.countdown+ ' ' + settings.section}>
                         <div>
-                            <button onClick={()=> countingDown(countdownTime)}>Start Countdown</button>
+                            <button className={settings.btn} onClick={()=> countingDown()}>Start Countdown</button>
                         </div>
                         <div className={settings.seconds}>
                             <input type="number" name="seconds" min="0" max="10" value={countdownTime} 
@@ -102,9 +118,21 @@ export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, is
                                     <p>Start</p>
                                 </div>
                                 <div>
-                                    <input type="number" className={settings.timeInput} placeholder="00" max="60" min="00"></input>
+                                    <input type="number" className={settings.timeInput} value={startMin} placeholder="00" max="60" min="00" 
+                                       onChange={(e) => {
+                                        setStartMin(() => {
+                                            let newMin = parseInt((e.target as HTMLInputElement).value);
+                                            setStartTime(convertStamps(newMin, startSec));
+                                            return newMin});
+                                       }} ></input>
                                     :
-                                    <input type="number" className={settings.timeInput}placeholder="00" max="60" min="0"></input>
+                                    <input type="number" className={settings.timeInput} value={startSec} placeholder="00" max="60" min="0" 
+                                    onChange={(e) => {
+                                        setStartSec(() => {
+                                            let newSec = parseInt((e.target as HTMLInputElement).value);
+                                            setStartTime(convertStamps(startMin, newSec));
+                                            return newSec});
+                                       }}></input>
                                 </div>
                             </div>
                             <div className={settings.end}>
@@ -112,9 +140,21 @@ export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, is
                                     <p>End</p>
                                 </div>
                                 <div>
-                                    <input type="number" className={settings.timeInput}placeholder="00" max="60" min="0"></input>
+                                    <input type="number" className={settings.timeInput} value={endMin} placeholder="00" max="60" min="0"
+                                    onChange={(e) => {
+                                        setEndMin(() => {
+                                            let newMin = parseInt((e.target as HTMLInputElement).value);
+                                            setEndTime(convertStamps(newMin, endSec));
+                                            return newMin});
+                                       }}></input>
                                     :
-                                    <input type="number" className={settings.timeInput}placeholder="00" max="60" min="0"></input>
+                                    <input type="number" className={settings.timeInput} value={endSec} placeholder="00" max="60" min="0"
+                                    onChange={(e) => {
+                                        setEndSec(() => {
+                                            let newSec = parseInt((e.target as HTMLInputElement).value);
+                                            setEndTime(convertStamps(endMin, newSec));
+                                            return newSec});
+                                       }}></input>
                                 </div>
                             </div>
                         </div>

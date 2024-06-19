@@ -33,17 +33,39 @@ export function VideoPlayer({}){
   const [isMuted, setIsMuted] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
 
+  // this is formatted in % played already
+  const [endSeconds, setEndSeconds] = useState(0);
+  const [startSeconds, setStartSeconds] = useState(0);
+  const [endMin, setEndMin] = useState(0);
+  const [endSec, setEndSec] = useState(0);
+  const [startMin, setStartMin] = useState(0);
+  const [startSec, setStartSec] = useState(0);
+
+  // converts to a fraction of the video
+  const convertSeconds = (seconds : number) => {
+    let dur = videoRef.current?.getDuration() ?? 0;
+    return seconds / dur * 100;
+  }
+
   const handleProgress = (time : any) => {
-      setCurrTime(time.played * 100);
+
+      if(time.played > convertSeconds(endSeconds)/100){
+        setCurrTime(() => {
+          let startTime = convertSeconds(startSeconds);
+          seek(startTime);
+          return startTime;
+        });
+      } else {
+        setCurrTime(time.played * 100);
+      }
     }
 
     // changes isFullScreen when user presses escape from fullscreen mode
     useEffect(() => {
       const onFullScreenChange = () => document.fullscreenElement ? setIsFullScreen(true) : setIsFullScreen(false);
-      if(!isCountingDown){
+
         document.addEventListener("fullscreenchange", onFullScreenChange);
         document.addEventListener("keydown", handleKeyDown);
-      }
 
       return () => {
         document.removeEventListener("fullscreenchange", onFullScreenChange);
@@ -53,64 +75,63 @@ export function VideoPlayer({}){
 
     const handleKeyDown = (event: KeyboardEvent) => {
       let seekTime = 5 / (videoRef.current?.getDuration() ?? 1) * 100;
-      switch(event.key){
-        case " ":
-          event.preventDefault();
-          setPlaying(prevPlay => !prevPlay);
-          break;
-          // you have to seek inside setCurrTime because state updates are put in a queue, so calling seek outside doesn't ensure it uses the most recent val
-        case "ArrowLeft":
-          setCurrTime(prev => {
-            const newTime = prev - seekTime;
-            seek(newTime);
-            return newTime;
-          });
-          break;
-        case "ArrowRight":
-          setCurrTime(prev => {
-            const newTime = prev + seekTime;
-            seek(newTime);
-            // returns the value it will seek to
-            return newTime;
-          })
-          break;
-        case "0":
-          setCurrTime(() => {
-            seek(0);
-            return 0;
-          })
-          break;
-        case "l":
-          setCurrTime(prev => {
-            const newTime = prev + 10 / (videoRef.current?.getDuration() ?? 1) * 100;
-            seek(newTime);
-            return newTime;
-          })
-          break;
-        case "j":
-          setCurrTime(prev => {
-            const newTime = prev - 10 / (videoRef.current?.getDuration() ?? 1) * 100;
-            seek(newTime);
-            return newTime;
-          })
-          break;
-        case "s":
-          setOpenModal(prevModal => !prevModal);
-          break;
-        case "f":
-          setIsFullScreen(prev => !prev);
-          console.log(isFullScreen);
-          toggleFullScreen();
-          break;
-        case "r":
-          setInverted(prev => !prev);
-          break;
-        case "m":
-          setIsMuted(prev => !prev);
-          break;
-        default:
-          break;
-      }
+        switch(event.key){
+          case " ":
+            event.preventDefault();
+            setPlaying(prevPlay => !prevPlay);
+            break;
+            // you have to seek inside setCurrTime because state updates are put in a queue, so calling seek outside doesn't ensure it uses the most recent val
+          case "ArrowLeft":
+            setCurrTime(prev => {
+              const newTime = prev - seekTime;
+              seek(newTime);
+              return newTime;
+            });
+            break;
+          case "ArrowRight":
+            setCurrTime(prev => {
+              const newTime = prev + seekTime;
+              seek(newTime);
+              // returns the value it will seek to
+              return newTime;
+            })
+            break;
+          case "0":
+            setCurrTime(() => {
+              seek(0);
+              return 0;
+            })
+            break;
+          case "l":
+            setCurrTime(prev => {
+              const newTime = prev + 10 / (videoRef.current?.getDuration() ?? 1) * 100;
+              seek(newTime);
+              return newTime;
+            })
+            break;
+          case "j":
+            setCurrTime(prev => {
+              const newTime = prev - 10 / (videoRef.current?.getDuration() ?? 1) * 100;
+              seek(newTime);
+              return newTime;
+            })
+            break;
+          case "s":
+            setOpenModal(prevModal => !prevModal);
+            break;
+          case "f":
+            setIsFullScreen(prev => !prev);
+            toggleFullScreen();
+            break;
+          case "r":
+            setInverted(prev => !prev);
+            break;
+          case "m":
+            setIsMuted(prev => !prev);
+            break;
+          default:
+            break;
+        }
     }
 
     const toggleFullScreen = () => {
@@ -147,7 +168,6 @@ export function VideoPlayer({}){
             }, 3000);
     }
 
-
   return (
 
     <div className={vid.container} ref={playerRef} id="container">
@@ -174,7 +194,7 @@ export function VideoPlayer({}){
       </div>
 
       {showTimeline && 
-        <div className={vid.overlay} onMouseEnter={()=> setShowTimeline(true)} >
+        <div className={vid.overlay} onMouseEnter={()=> setShowTimeline(true)} onMouseLeave={() => setShowTimeline(false)}>
           <div className={controls.timeline}>
               <input type="range" className={controls.seeker} min="0" max="100" value={currTime} onChange={(e) => seek(parseInt((e.target as HTMLInputElement).value))}/>
           </div>
@@ -231,6 +251,16 @@ export function VideoPlayer({}){
           isFullScreen={isFullScreen}
           isCountingDown={isCountingDown}
           setIsCountingDown={setIsCountingDown}
+          setEndTime = {setEndSeconds}
+          setStartTime={setStartSeconds}
+          endMin={endMin}
+          endSec={endSec}
+          setEndMin={setEndMin}
+          setEndSec={setEndSec}
+          startMin={startMin}
+          startSec={startSec}
+          setStartMin={setStartMin}
+          setStartSec={setStartSec}
         />
       </div>
       }

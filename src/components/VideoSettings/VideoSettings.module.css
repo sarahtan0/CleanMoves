@@ -176,6 +176,6 @@ hr{
     background-color: var(--highlight);
 }
 
-button{
-    outline-color: var(--shadow2);
+.btn{
+    border: 1px solid var(--shadow2);
 }
