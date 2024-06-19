@@ -4,7 +4,7 @@ import {useEffect, useRef, useState} from "react";
 import ReactPlayer from "react-player";
 import {VideoSettings} from "../VideoSettings/VideoSettings";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faGear, faPlay, faPause, faExpand, faVolumeLow, faVolumeMute, faCompress} from "@fortawesome/free-solid-svg-icons"
+import {faGear, faPlay, faPause, faExpand, faVolumeLow, faVolumeMute, faCompress, faVolumeHigh} from "@fortawesome/free-solid-svg-icons"
 // import ReactPlayer from "react-player/youtube";
 import { format } from 'date-fns';
 
@@ -34,12 +34,17 @@ export function VideoPlayer({}){
   const [isFullScreen, setIsFullScreen] = useState(false);
 
   // this is formatted in % played already
-  const [endSeconds, setEndSeconds] = useState(0);
   const [startSeconds, setStartSeconds] = useState(0);
-  const [endMin, setEndMin] = useState(0);
-  const [endSec, setEndSec] = useState(0);
+  const [endMin, setEndMin] = useState(60);
+  const [endSec, setEndSec] = useState(60);
   const [startMin, setStartMin] = useState(0);
   const [startSec, setStartSec] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [endSeconds, setEndSeconds] = useState(duration ?? 0);
+  const endSecondsRef = useRef(endSeconds);
+
+  const [seekSeconds, setSeekSeconds] = useState(5);
+  const seekSecondsRef = useRef(seekSeconds);
 
   // converts to a fraction of the video
   const convertSeconds = (seconds : number) => {
@@ -48,7 +53,7 @@ export function VideoPlayer({}){
   }
 
   const handleProgress = (time : any) => {
-      if(isLooped && time.played > convertSeconds(endSeconds)/100){
+      if(isLooped && playing && time.played > convertSeconds(endSeconds)/100){
         setCurrTime(() => {
           let startTime = convertSeconds(startSeconds);
           seek(startTime);
@@ -66,31 +71,44 @@ export function VideoPlayer({}){
         document.addEventListener("fullscreenchange", onFullScreenChange);
         document.addEventListener("keydown", handleKeyDown);
 
+        // ensures that the new seekSeconds value is updated properly and there's no lag (because it's introducing a new value each time)
+        // wouldn't need to do this if it modified the previous value
+        seekSecondsRef.current = seekSeconds;
+        endSecondsRef.current = duration;
+
       return () => {
         document.removeEventListener("fullscreenchange", onFullScreenChange);
         document.removeEventListener("keydown", handleKeyDown);
       }
-    }, [])
+    }, [duration, endSeconds, seekSeconds])
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      let seekTime = 5 / (videoRef.current?.getDuration() ?? 1) * 100;
+      let seekTime = seekSeconds / (videoRef.current?.getDuration() ?? 1) * 100;
         switch(event.key){
           case " ":
             event.preventDefault();
             setPlaying(prevPlay => !prevPlay);
             break;
-            // you have to seek inside setCurrTime because state updates are put in a queue, so calling seek outside doesn't ensure it uses the most recent val
           case "ArrowLeft":
             setCurrTime(prev => {
+              // you have to seek inside setCurrTime because state updates are put in a queue, so calling seek outside doesn't ensure it uses the most recent val
               const newTime = prev - seekTime;
-              seek(newTime);
+              if(newTime < 0){
+                seek(0);
+              } else {
+                seek(newTime);
+              }
               return newTime;
             });
             break;
           case "ArrowRight":
             setCurrTime(prev => {
               const newTime = prev + seekTime;
-              seek(newTime);
+              if(newTime > 100){
+                seek(100);
+              } else {
+                seek(newTime);
+              }
               // returns the value it will seek to
               return newTime;
             })
@@ -167,6 +185,16 @@ export function VideoPlayer({}){
             }, 3000);
     }
 
+    const volumeIcon = () => {
+      if(volume == 0){
+        return faVolumeMute;
+      } else if (volume < 50){
+        return faVolumeLow;
+      } else {
+        return faVolumeHigh;
+      }
+    }
+
   return (
 
     <div className={vid.container} ref={playerRef} id="container">
@@ -176,7 +204,10 @@ export function VideoPlayer({}){
         onClick={()=>setPlaying(!playing)}>
         
         <ReactPlayer 
-          onReady={() => setPlaying(false)}
+          onReady={() => {
+            setPlaying(false);
+            setDuration(videoRef.current?.getDuration() ?? 0);
+          }}
           className={vid.player}
           url = {url}
           controls={ false }
@@ -211,7 +242,7 @@ export function VideoPlayer({}){
               </div>
               <div className={controls.volume} onMouseEnter={() => setShowVolume(true)} onMouseLeave={() => setShowVolume(false)}>
                 <div className={controls.volumeIcon} style={{color: "white"}} onClick={()=>setIsMuted(!isMuted)}>
-                  <FontAwesomeIcon icon={isMuted ? faVolumeMute : faVolumeLow} />
+                  <FontAwesomeIcon icon={volumeIcon()} />
                 </div>
                 {showVolume && 
                   <input type="range" min="0" max="100" value={volume} className={controls.volSlider} 
@@ -238,6 +269,8 @@ export function VideoPlayer({}){
       {openModal && 
       <div className={vid.modal}>
         <VideoSettings 
+          duration={duration}
+          currTime={currTime}
           setURL = {setURL}
           setOpenModal={setOpenModal}
           currSpeed={currSpeed}
@@ -251,6 +284,7 @@ export function VideoPlayer({}){
           isCountingDown={isCountingDown}
           setIsCountingDown={setIsCountingDown}
           setEndTime = {setEndSeconds}
+          endTime = {endSeconds}
           setStartTime={setStartSeconds}
           endMin={endMin}
           endSec={endSec}
@@ -260,6 +294,8 @@ export function VideoPlayer({}){
           startSec={startSec}
           setStartMin={setStartMin}
           setStartSec={setStartSec}
+          setSeekSeconds={setSeekSeconds}
+          seekSeconds={seekSeconds}
         />
       </div>
       }

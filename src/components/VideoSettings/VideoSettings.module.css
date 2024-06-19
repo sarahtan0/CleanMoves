@@ -33,10 +33,10 @@
     justify-content: center;
     display: flex;
 }
+
 .fullscreen{
     background-color: rgba(0,0,0,0.5);
 }
-
 
 #close{
     background-color: var(--white); 
@@ -50,7 +50,7 @@
 }
 
 .container{
-    width: 25%;
+    width: 28%;
     height: 70%;
     border-radius: 12px;
     background-color: var(--white);
@@ -58,6 +58,20 @@
     display: block;
     position: absolute;
     z-index: 10;
+    overflow: auto;
+}
+
+::-webkit-scrollbar{
+    background-color: var(--white);
+    border-radius: 12px;
+}
+
+::-webkit-scrollbar-thumb{
+    background-color: rgba(156,178,186,0.5);
+}
+
+::-webkit-scrollbar-thumb:hover{
+    background-color: rgba(156,178,186,0.8);
 }
 
 #url{
@@ -86,21 +100,11 @@ input[type="number"]{
     text-align: center;
 }
 
-.grayed {
-    pointer-events: none;
-    opacity: 50%;
-}
-
 .startEnd{
     display: flex;
     justify-content: space-evenly;
 }
 
-.speed{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
 
 .section{
     margin-top: 20px;
@@ -164,6 +168,8 @@ hr{
 
 .speeds{
     transform: scale(1);
+    display: flex;
+    justify-content: center;
 }
 
 #rightSpeed{
@@ -179,3 +185,43 @@ hr{
 .btn{
     border: 1px solid var(--shadow2);
 }
+
+.center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gap{
+    gap: 8px;
+}
+
+.lessPad{
+    margin-bottom: 0px;
+}
+
+.slider{
+    -webkit-appearance: none;
+    appearance: none;
+    height: 7px;
+    border-radius: 10vh;
+    background-color: rgba(156,178,186,0.45);
+}
+
+.slider::-webkit-slider-thumb{
+    -webkit-appearance: none;
+    appearance: none;
+    width: 2vh;
+    height: 2vh;
+    border-radius: 50%; 
+    background: white;
+    cursor: pointer;
+    box-shadow: 2px 2px rgba(0,0,0,0.2);
+}
+
+.transparentButton {
+    background-color: transparent;
+    padding: 8px;
+    color: var(--txt);
+}
+

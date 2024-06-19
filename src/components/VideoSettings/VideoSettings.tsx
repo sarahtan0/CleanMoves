@@ -1,7 +1,7 @@
 import settings from "./VideoSettings.module.css";
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faXmark, faBookmark } from '@fortawesome/free-solid-svg-icons'
 import metronome from "./metronome.mp3";
 
 type VideoSettingsProps = {
@@ -18,6 +18,7 @@ type VideoSettingsProps = {
     isCountingDown : boolean;
     setIsCountingDown: Dispatch<SetStateAction<boolean>>;
     setEndTime : Dispatch<SetStateAction<number>>;
+    endTime : number;
     setStartTime : Dispatch<SetStateAction<number>>;
     startMin : number;
     startSec : number;
@@ -27,11 +28,19 @@ type VideoSettingsProps = {
     setStartSec : Dispatch<SetStateAction<number>>;
     setEndMin : Dispatch<SetStateAction<number>>;
     setEndSec : Dispatch<SetStateAction<number>>;
+    setSeekSeconds : Dispatch<SetStateAction<number>>;
+    seekSeconds : number;
+    currTime : number;
+    duration : number;
 }
 
 export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, isLooped, setIsLooped,
     countdownTime, setCountdownTime, setPlay, isFullScreen, setEndTime, setStartTime, startMin, startSec, endMin, endSec, setStartMin, setStartSec,
-    setEndMin, setEndSec} : VideoSettingsProps) {
+    setEndMin, setEndSec, setSeekSeconds, seekSeconds, currTime, duration, endTime} : VideoSettingsProps) {
+    
+    const minRef = useRef(0);
+    const secRef = useRef(0);
+    const endRef = useRef(0);
     
     const tick = new Audio(metronome);
 
@@ -45,7 +54,9 @@ export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, is
               tick.play();
             }, delay);
           };
+          
         if(countdownTime > 0){
+            setOpenModal(false);
             setPlay(false);
             for (let i = 0; i < countdownTime; i++) {
                 sound(i * 1000);
@@ -58,7 +69,26 @@ export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, is
         }
     }
 
-    const convertStamps = (min : number, sec : number) => {
+    // useEffect(() => {
+    //     endRef.current = endTime;
+    //   }, [endTime]);
+
+    const convertToEnd = (time : number) => {
+        let seconds = time / 100 * duration;
+        let min = Math.trunc(seconds/60);
+        let sec = Math.trunc(seconds % 60);
+        let endStamp = convertFromStamps(min, sec);
+
+        minRef.current = min;
+        secRef.current = sec;
+        endRef.current = endStamp;
+
+        setEndMin(min);
+        setEndSec(sec);
+        setEndTime(endStamp);
+    }
+
+    const convertFromStamps = (min : number, sec : number) => {
         let convertedTime = (min * 60) + sec;
         return convertedTime;
     }
@@ -82,6 +112,7 @@ export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, is
                             id={settings.url} placeholder="https://www.youtube.com"></input>
                     </div>
                     <hr></hr>
+                    <h4>Countdown</h4>
                     <div className={settings.countdown+ ' ' + settings.section}>
                         <div>
                             <button className={settings.btn} onClick={()=> countingDown()}>Start Countdown</button>
@@ -94,7 +125,7 @@ export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, is
                     </div>
                     <hr></hr>
                     <div className={settings.speed + ' ' + settings.section}>
-                            <label htmlFor="speed" style={{fontWeight: "bold"}}>Speed </label>
+                            <h4>Speed</h4>
                         <div className={settings.speeds}>
                             <button className={' ' + (compareSpeed(0.25) && settings.selected)} id={settings.leftSpeed} 
                                 onClick={() => setCurrSpeed(.25)}> 0.25 </button>
@@ -110,19 +141,22 @@ export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, is
                     </div>
                     <hr></hr>
                     <div className={settings.loop + ' ' + settings.section}>
-                        <input type="checkbox" name="loop" checked={isLooped} onChange={(e) => setIsLooped(e.target.checked)}></input>
                         <label htmlFor="loop" style={{fontWeight: "bold"}}> Loop</label>
-                        <div className={settings.startEnd + ' ' + (!isLooped && settings.grayed)}>
+                        <input type="checkbox" name="loop" checked={isLooped} onChange={(e) => setIsLooped(e.target.checked)}></input>
+                        <div className={settings.startEnd}>
                             <div className={settings.start}>
-                                <div>
+                                <div className={settings.center + ' ' + settings.gap}>
                                     <p>Start</p>
+                                    <button className={settings.transparentButton}>
+                                        <FontAwesomeIcon icon={faBookmark}/>
+                                    </button>
                                 </div>
                                 <div>
                                     <input type="number" className={settings.timeInput} value={startMin} placeholder="00" max="60" min="00" 
                                        onChange={(e) => {
                                         setStartMin(() => {
                                             let newMin = parseInt((e.target as HTMLInputElement).value);
-                                            setStartTime(convertStamps(newMin, startSec));
+                                            setStartTime(convertFromStamps(newMin, startSec));
                                             return newMin});
                                        }} ></input>
                                     :
@@ -130,35 +164,48 @@ export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, is
                                     onChange={(e) => {
                                         setStartSec(() => {
                                             let newSec = parseInt((e.target as HTMLInputElement).value);
-                                            setStartTime(convertStamps(startMin, newSec));
+                                            setStartTime(convertFromStamps(startMin, newSec));
                                             return newSec});
                                        }}></input>
                                 </div>
                             </div>
                             <div className={settings.end}>
-                                <div>
+                                <div className={settings.center + ' ' + settings.gap}>
                                     <p>End</p>
+                                    <button className={settings.transparentButton} onClick={() => convertToEnd(currTime)}>
+                                        <FontAwesomeIcon icon={faBookmark}/>
+                                    </button>
                                 </div>
                                 <div>
-                                    <input type="number" className={settings.timeInput} value={endMin} placeholder="00" max="60" min="0"
-                                    onChange={(e) => {
-                                        setEndMin(() => {
-                                            let newMin = parseInt((e.target as HTMLInputElement).value);
-                                            setEndTime(convertStamps(newMin, endSec));
-                                            return newMin});
-                                       }}></input>
+                                    <input type="number" className={settings.timeInput} value={endMin} placeholder="60" max="60" min="0"></input>
                                     :
-                                    <input type="number" className={settings.timeInput} value={endSec} placeholder="00" max="60" min="0"
+                                    <input type="number" className={settings.timeInput} value={endSec} placeholder="60" max="60" min="0"
                                     onChange={(e) => {
                                         setEndSec(() => {
                                             let newSec = parseInt((e.target as HTMLInputElement).value);
-                                            setEndTime(convertStamps(endMin, newSec));
+                                            setEndTime(convertFromStamps(endMin, newSec));
                                             return newSec});
                                        }}></input>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <hr></hr>
+                    <div>
+                        <h4 className={settings.lessPad}>Seeking</h4>
+                        <div>
+                            <div className={settings.center}>
+                                <p>seek by {seekSeconds} seconds</p>
+                            </div>
+                            <div className={settings.center}>
+                                <input className={settings.slider} type="range" min="1" max="10" name="seekSeconds" value={seekSeconds}
+                                    onChange={(e) => {
+                                        setSeekSeconds(() => parseInt((e.target as HTMLInputElement).value));
+                                    }}/>
+                            </div>
+                        </div>
+                    </div>
+                    <h1></h1>
                 </div>
                 
             </div>
