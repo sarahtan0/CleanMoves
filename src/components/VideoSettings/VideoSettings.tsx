@@ -16,6 +16,7 @@ type VideoSettingsProps = {
     countdownTime: number;
     setCountdownTime: Dispatch<SetStateAction<number>>;
     setPlay: (play : boolean) => void;
+    play : boolean;
     isFullScreen : boolean;
     isCountingDown : boolean;
     setIsCountingDown: Dispatch<SetStateAction<boolean>>;
@@ -34,11 +35,12 @@ type VideoSettingsProps = {
     seekSeconds : number;
     currTime : number;
     duration : number;
+    setCountdownSecond : Dispatch<SetStateAction<number>>;
 }
 
 export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, isLooped, setIsLooped,
-    countdownTime, setCountdownTime, setPlay, isFullScreen, setEndTime, setStartTime, startMin, startSec, endMin, endSec, setStartMin, setStartSec,
-    setEndMin, setEndSec, setSeekSeconds, seekSeconds, currTime, duration, endTime} : VideoSettingsProps) {
+    countdownTime, setCountdownTime, setIsCountingDown, setPlay, isFullScreen, setEndTime, setStartTime, startMin, startSec, endMin, endSec, setStartMin, setStartSec,
+    setEndMin, setEndSec, setSeekSeconds, seekSeconds, currTime, duration, setCountdownSecond, play} : VideoSettingsProps) {
     
     const minRef = useRef(0);
     const secRef = useRef(0);
@@ -54,18 +56,22 @@ export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, is
     function countingDown() {
         const sound = (delay: number) => {
             setTimeout(() => {
-              tick.play();
+            tick.play();
+            setCountdownSecond(prev => prev - 1);
             }, delay);
           };
           
         if(countdownTime > 0){
             setOpenModal(false);
             setPlay(false);
-            for (let i = 0; i < countdownTime; i++) {
+            setIsCountingDown(true);
+            setCountdownSecond(countdownTime + 1);
+            for (let i = countdownTime - 1; i >= 0; --i) {
                 sound(i * 1000);
-                if (i === countdownTime - 1) {
+                if (i === 1) {
                 setTimeout(() => {
                     setPlay(true);
+                    setIsCountingDown(false);
                 }, 1000 * countdownTime);
                 }
             }

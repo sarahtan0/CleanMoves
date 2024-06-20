@@ -27,6 +27,7 @@ export function VideoPlayer({}){
   const [showTimeline, setShowTimeline] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [isCountingDown, setIsCountingDown] = useState(false);
+  const [countdownSecond, setCountdownSecond] = useState(0);
 
   // time is as a % of total video completed (ex: 10 = 10% of video is watched)
   const [currTime, setCurrTime] = useState(0);
@@ -42,7 +43,7 @@ export function VideoPlayer({}){
   const [startMin, setStartMin] = useState(0);
   const [startSec, setStartSec] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [endSeconds, setEndSeconds] = useState(videoRef.current?.getDuration() ?? 0);
+  const [endSeconds, setEndSeconds] = useState(0);
 
   const [seekSeconds, setSeekSeconds] = useState(5);
   const seekSecondsRef = useRef(seekSeconds);
@@ -75,6 +76,7 @@ export function VideoPlayer({}){
         // ensures that the new seekSeconds value is updated properly and there's no lag (because it's introducing a new value each time)
         // wouldn't need to do this if it modified the previous value
         seekSecondsRef.current = seekSeconds;
+        setCountdownSecond(countdownTime);
 
       return () => {
         document.removeEventListener("fullscreenchange", onFullScreenChange);
@@ -198,6 +200,11 @@ export function VideoPlayer({}){
   return (
 
     <div className={vid.container} ref={playerRef} id="container">
+      {isCountingDown && 
+          <div className={vid.countdownSecond}>
+            <h1>{countdownSecond}</h1>
+          </div>
+      }
       <div className={vid.playerWrapper + ' ' + (inverted && vid.invert) + ' ' + (isFullScreen && vid.fullscreen)} 
         onMouseMove={()=> handleMouseHover()} 
         onMouseLeave={()=>{
@@ -235,20 +242,20 @@ export function VideoPlayer({}){
           <div className={controls.timeline}>
             <Box width="98%" display="flex" alignItems="center">
               <Slider min={0} max={100} value={currTime} onChange={(e) => seek(parseInt((e.target as HTMLInputElement).value))}
-              sx={{
-                color: '#FFFFFF',
-                '& .MuiSlider-track': {
-                  border: 'none',
-                  color: '#FFFFFF'
-                },
-                '& .MuiSlider-thumb': {
-                  color: '#FFFFFF', 
-                  width: 15,
-                  height: 15
-                },
-                '& .MuiSlider-rail': {
-                  color: '#545454', 
-                },
+                sx={{
+                  color: '#FFFFFF',
+                  '& .MuiSlider-track': {
+                    border: 'none',
+                    color: '#FFFFFF'
+                  },
+                  '& .MuiSlider-thumb': {
+                    color: '#FFFFFF', 
+                    width: 15,
+                    height: 15
+                  },
+                  '& .MuiSlider-rail': {
+                    color: '#444444', 
+                  },
               }}></Slider>
             </Box>
           </div>
@@ -309,6 +316,7 @@ export function VideoPlayer({}){
       {openModal && 
       <div className={vid.modal}>
         <VideoSettings 
+          setCountdownSecond={setCountdownSecond}
           duration={duration}
           currTime={currTime}
           setURL = {setURL}
@@ -335,6 +343,7 @@ export function VideoPlayer({}){
           setStartMin={setStartMin}
           setStartSec={setStartSec}
           setSeekSeconds={setSeekSeconds}
+          play={playing}
           seekSeconds={seekSeconds}
         />
       </div>
