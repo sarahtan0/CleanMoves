@@ -7,7 +7,6 @@ import Slider from "@mui/material/Slider";
 import Box from "@mui/material/Box";
 
 type VideoSettingsProps = {
-    setURL: Dispatch<SetStateAction<string>>;
     setOpenModal: Dispatch<SetStateAction<boolean>>;
     currSpeed: number;
     setCurrSpeed: Dispatch<SetStateAction<number>>;
@@ -39,7 +38,7 @@ type VideoSettingsProps = {
     addTimeoutId : Dispatch<SetStateAction<number[]>>; 
 }
 
-export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, isLooped, setIsLooped,
+export function VideoSettings({setOpenModal, currSpeed, setCurrSpeed, isLooped, setIsLooped,
     countdownTime, setCountdownTime, setIsCountingDown, setPlay, isFullScreen, setEndTime, setStartTime, startMin, startSec, endMin, endSec, setStartMin, setStartSec,
     setEndMin, setEndSec, setSeekSeconds, seekSeconds, currTime, duration, setCountdownSecond, addTimeoutId} : VideoSettingsProps) {
     
@@ -132,14 +131,7 @@ export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, is
                     </button>
                 </div>
                 <div className={settings.body}>
-                    <hr></hr>
-                    <h3>YouTube Link</h3>
-                    <div className={settings.section}>
-                        <input onChange={e => {
-                            setURL(e.target.value)
-                            setPlay(false)}}
-                            id={settings.url} placeholder="https://www.youtube.com"></input>
-                    </div>
+                    
                     <hr></hr>
                     <h4>Countdown</h4>
                     <div className={settings.countdown+ ' ' + settings.section}>

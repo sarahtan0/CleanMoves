@@ -48,12 +48,19 @@ export function VideoPlayer(){
   } = useVideoPlayerData(videoRef);
 
   return (
-
     <div className={vid.container} ref={playerRef} id="container">
       {isCountingDown && 
           <div className={vid.countdownSecond}>
             <h1>{currCountdownSecond}</h1>
           </div>
+      }
+      {!isFullScreen &&
+        <div style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
+            <input id={vid.url} onChange={e => {
+                setURL(e.target.value)
+                setPlaying(false)}}
+                placeholder="Paste YouTube Link"></input>
+        </div>
       }
       <div className={vid.playerWrapper + ' ' + (inverted && vid.invert) + ' ' + (isFullScreen && vid.fullscreen)} 
         onMouseMove={()=> handleMouseHover()} 

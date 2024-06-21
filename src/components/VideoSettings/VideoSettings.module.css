@@ -75,19 +75,6 @@
     background-color: rgba(156,178,186,0.8);
 }
 
-#url{
-    color: var(--txt);
-    padding: 12px;
-    border-radius: 10px;
-    border-width: 0px;
-    outline: none;
-    font-size: 14px;
-    font-family: 'Poppins', sans-serif;
-    font-weight: bold;
-    width: 90%;
-    box-shadow: 3px 3px var(--shadow2);
-  }
-
 input[type="number"]{
     color: var(--txt);
     padding: 8px;
@@ -105,7 +92,6 @@ input[type="number"]{
     display: flex;
     justify-content: space-evenly;
 }
-
 
 .section{
     margin-top: 20px;
