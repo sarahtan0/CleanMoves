@@ -112,7 +112,7 @@ export function VideoPlayer(){
           <div className={controls.inline}>
             <div>
               <button className={vid.transparentButton + ' ' + controls.playButton}>
-                <FontAwesomeIcon icon={playing ? faPause : faPlay} onClick={() => setPlaying(prevPlay => !prevPlay)}/>
+                <FontAwesomeIcon icon={playing ? faPause : faPlay} onClick={() => setPlaying((prevPlay : boolean) => !prevPlay)}/>
               </button>
               <div className={vid.timestamp}>
                 <p id={vid.currTime}>
