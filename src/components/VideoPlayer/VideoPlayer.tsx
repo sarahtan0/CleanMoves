@@ -22,12 +22,12 @@ export function VideoPlayer({}){
   const [openModal, setOpenModal] = useState(false);
   const [currSpeed, setCurrSpeed] = useState(1.0);
   const [isLooped, setIsLooped] = useState(false);
-  const [countdownTime, setCountdownTime] = useState(0);
+  const [countdownTime, setCountdownTime] = useState(1);
   const [inverted, setInverted] = useState(false);
   const [showTimeline, setShowTimeline] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [isCountingDown, setIsCountingDown] = useState(false);
-  const [countdownSecond, setCountdownSecond] = useState(0);
+  const [currCountdownSecond, setCurrCountdownSecond] = useState(1);
 
   // time is as a % of total video completed (ex: 10 = 10% of video is watched)
   const [currTime, setCurrTime] = useState(0);
@@ -47,6 +47,9 @@ export function VideoPlayer({}){
 
   const [seekSeconds, setSeekSeconds] = useState(5);
   const seekSecondsRef = useRef(seekSeconds);
+
+  const [timeoutId, addTimeoutId] = useState<number[]>([]);
+    
 
   // converts to a fraction of the video
   const convertSeconds = (seconds : number) => {
@@ -76,13 +79,16 @@ export function VideoPlayer({}){
         // ensures that the new seekSeconds value is updated properly and there's no lag (because it's introducing a new value each time)
         // wouldn't need to do this if it modified the previous value
         seekSecondsRef.current = seekSeconds;
-        setCountdownSecond(countdownTime);
+        if(isCountingDown && playing) {
+          setIsCountingDown(false);
+          timeoutId.forEach(timeout => clearTimeout(timeout));
+        }
 
       return () => {
         document.removeEventListener("fullscreenchange", onFullScreenChange);
         document.removeEventListener("keydown", handleKeyDown);
       }
-    }, [duration, endSeconds, seekSeconds])
+    }, [duration, endSeconds, seekSeconds, isCountingDown, playing])
 
     const handleKeyDown = (event: KeyboardEvent) => {
       let seekTime = seekSeconds / (videoRef.current?.getDuration() ?? 1) * 100;
@@ -202,7 +208,7 @@ export function VideoPlayer({}){
     <div className={vid.container} ref={playerRef} id="container">
       {isCountingDown && 
           <div className={vid.countdownSecond}>
-            <h1>{countdownSecond}</h1>
+            <h1>{currCountdownSecond}</h1>
           </div>
       }
       <div className={vid.playerWrapper + ' ' + (inverted && vid.invert) + ' ' + (isFullScreen && vid.fullscreen)} 
@@ -316,7 +322,8 @@ export function VideoPlayer({}){
       {openModal && 
       <div className={vid.modal}>
         <VideoSettings 
-          setCountdownSecond={setCountdownSecond}
+          addTimeoutId={addTimeoutId}
+          setCountdownSecond={setCurrCountdownSecond}
           duration={duration}
           currTime={currTime}
           setURL = {setURL}

@@ -36,11 +36,12 @@ type VideoSettingsProps = {
     currTime : number;
     duration : number;
     setCountdownSecond : Dispatch<SetStateAction<number>>;
+    addTimeoutId : Dispatch<SetStateAction<number[]>>; 
 }
 
 export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, isLooped, setIsLooped,
     countdownTime, setCountdownTime, setIsCountingDown, setPlay, isFullScreen, setEndTime, setStartTime, startMin, startSec, endMin, endSec, setStartMin, setStartSec,
-    setEndMin, setEndSec, setSeekSeconds, seekSeconds, currTime, duration, setCountdownSecond, play} : VideoSettingsProps) {
+    setEndMin, setEndSec, setSeekSeconds, seekSeconds, currTime, duration, setCountdownSecond, addTimeoutId} : VideoSettingsProps) {
     
     const minRef = useRef(0);
     const secRef = useRef(0);
@@ -55,29 +56,29 @@ export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, is
 
     function countingDown() {
         const sound = (delay: number) => {
-            setTimeout(() => {
+            const timeoutId = setTimeout(() => {
             tick.play();
-            setCountdownSecond(prev => prev - 1);
+            setCountdownSecond(prev => prev-1);
             }, delay);
+            addTimeoutId((prevIds) => prevIds.concat(timeoutId));
           };
           
-        if(countdownTime > 0){
-            setOpenModal(false);
-            setPlay(false);
-            setIsCountingDown(true);
-            setCountdownSecond(countdownTime + 1);
-            for (let i = countdownTime - 1; i >= 0; --i) {
-                sound(i * 1000);
-                if (i === 1) {
-                setTimeout(() => {
-                    setPlay(true);
-                    setIsCountingDown(false);
-                }, 1000 * countdownTime);
-                }
+        setOpenModal(false);
+        setPlay(false);
+        setIsCountingDown(true);
+        setCountdownSecond(countdownTime+1);
+        for (let i = countdownTime; i > 0; --i) {
+            sound((i-1) * 1000);
+            if (i === 1) {
+            const timeoutId = setTimeout(() => {
+                setPlay(true);
+                setIsCountingDown(false);
+            }, 1000 * countdownTime);
+            addTimeoutId((prevIds) => prevIds.concat(timeoutId));
             }
         }
     }
-
+      
     const convertToStart = (time : number) => {
         let seconds = time / 100 * duration;
         let min = Math.trunc(seconds/60);
@@ -146,7 +147,7 @@ export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, is
                             <button className={settings.btn} onClick={()=> countingDown()}>Start Countdown</button>
                         </div>
                         <div className={settings.seconds}>
-                            <input type="number" name="seconds" min="0" max="10" value={countdownTime} 
+                            <input type="number" name="seconds" min="1" max="10" value={countdownTime} 
                                 onChange={(e) => setCountdownTime(parseInt(e.target.value))}></input>
                             <label htmlFor="seconds"> seconds </label> 
                         </div>
