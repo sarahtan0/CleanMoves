@@ -5,7 +5,7 @@ import { OnProgressProps } from 'react-player/base';
 
 
 export const useVideoPlayerData = (videoRef : React.RefObject<ReactPlayer>) => {
-  const BASEURL = "";
+  const BASEURL = "https://www.youtube.com/watch?v=JKp80jCzho0&t=64s";
   const [url, setURL] = useState(BASEURL);
   const [openModal, setOpenModal] = useState(false);
   const [currSpeed, setCurrSpeed] = useState(1.0);
