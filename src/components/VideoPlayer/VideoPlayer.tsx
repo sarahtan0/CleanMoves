@@ -177,7 +177,6 @@ export function VideoPlayer(){
           setCountdownSecond={setCurrCountdownSecond}
           duration={duration}
           currTime={currTime}
-          setURL = {setURL}
           setOpenModal={setOpenModal}
           currSpeed={currSpeed}
           setCurrSpeed={setCurrSpeed}
