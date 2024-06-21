@@ -1,5 +1,5 @@
 import settings from "./VideoSettings.module.css";
-import { Dispatch, SetStateAction, useRef, useEffect } from 'react';
+import { Dispatch, SetStateAction, useRef } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark, faBookmark } from '@fortawesome/free-solid-svg-icons'
 import metronome from "./metronome.mp3";
