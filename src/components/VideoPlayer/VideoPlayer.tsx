@@ -65,7 +65,7 @@ export function VideoPlayer(){
         
         <ReactPlayer 
           onReady={() => {
-            let dur = videoRef.current?.getDuration() ?? 0;
+            const dur = videoRef.current?.getDuration() ?? 0;
             setPlaying(false);
             setDuration(dur);
             setEndSeconds(dur);

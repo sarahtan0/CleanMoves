@@ -1,6 +1,6 @@
 import nav from "./Navbar.module.css"
 
-export function Navbar({}){
+export function Navbar(){
     return (
         <div className={nav.navBar}>
             <h2>CleanMoves</h2>

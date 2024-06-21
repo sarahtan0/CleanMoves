@@ -7,7 +7,7 @@ import Slider from "@mui/material/Slider";
 import Box from "@mui/material/Box";
 
 type VideoSettingsProps = {
-    setURL: (url : string) => void;
+    setURL: Dispatch<SetStateAction<string>>;
     setOpenModal: Dispatch<SetStateAction<boolean>>;
     currSpeed: number;
     setCurrSpeed: Dispatch<SetStateAction<number>>;
@@ -80,10 +80,10 @@ export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, is
     }
       
     const convertToStart = (time : number) => {
-        let seconds = time / 100 * duration;
-        let min = Math.trunc(seconds/60);
-        let sec = Math.trunc(seconds % 60);
-        let startStamp = convertFromStamps(min, sec);
+        const seconds = time / 100 * duration;
+        const min = Math.trunc(seconds/60);
+        const sec = Math.trunc(seconds % 60);
+        const startStamp = convertFromStamps(min, sec);
 
         minRef.current = min;
         secRef.current = sec;
@@ -95,10 +95,10 @@ export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, is
     }
 
     const convertToEnd = (time : number) => {
-        let seconds = time / 100 * duration;
-        let min = Math.trunc(seconds/60);
-        let sec = Math.trunc(seconds % 60);
-        let endStamp = convertFromStamps(min, sec);
+        const seconds = time / 100 * duration;
+        const min = Math.trunc(seconds/60);
+        const sec = Math.trunc(seconds % 60);
+        const endStamp = convertFromStamps(min, sec);
 
         minRef.current = min;
         secRef.current = sec;
@@ -110,7 +110,7 @@ export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, is
     }
 
     const convertFromStamps = (min : number, sec : number) => {
-        let convertedTime = (min * 60) + sec;
+        const convertedTime = (min * 60) + sec;
         return convertedTime;
     }
 
