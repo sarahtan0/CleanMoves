@@ -6,7 +6,7 @@ export function Navbar({}){
             <h2>CleanMoves</h2>
             <ul>
                 <li>
-                <a href="/">Practice</a>
+                <a href="/VideoPlayer">Practice</a>
                 </li>
                 <li>
                 <a href="/">Record</a>

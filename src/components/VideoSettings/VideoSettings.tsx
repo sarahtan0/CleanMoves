@@ -15,7 +15,7 @@ type VideoSettingsProps = {
     setIsLooped: Dispatch<SetStateAction<boolean>>;
     countdownTime: number;
     setCountdownTime: Dispatch<SetStateAction<number>>;
-    setPlay: (play : boolean) => void;
+    setPlay: Dispatch<SetStateAction<boolean>>;
     play : boolean;
     isFullScreen : boolean;
     isCountingDown : boolean;
@@ -211,7 +211,7 @@ export function VideoSettings({setURL, setOpenModal, currSpeed, setCurrSpeed, is
                             </div>
                             <div className={settings.center}>
                                 <Box width={200} display="flex" alignItems="center">
-                                    <Slider max={10} min={0} aria-label="Volume" value={seekSeconds} onChange={(e) => {
+                                    <Slider max={10} min={1} aria-label="Volume" value={seekSeconds} onChange={(e) => {
                                         setSeekSeconds(parseInt((e.target as HTMLInputElement).value));}} 
                                     sx={{
                                         color: '#FFFFFF',
