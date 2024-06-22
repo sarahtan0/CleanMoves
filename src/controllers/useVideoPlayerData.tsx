@@ -19,7 +19,7 @@ export const useVideoPlayerData = (videoRef : React.RefObject<ReactPlayer>) => {
   // time is as a % of total video completed (ex: 10 = 10% of video is watched)
   const [currTime, setCurrTime] = useState(0);
   const [showVolume, setShowVolume] = useState(false);
-  const [volume, setVolume] = useState(50);
+  const [volume, setVolume] = useState(100);
   const [isMuted, setIsMuted] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
   // this is formatted in % played already
