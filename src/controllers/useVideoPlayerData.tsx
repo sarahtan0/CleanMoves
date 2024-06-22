@@ -35,7 +35,6 @@ export const useVideoPlayerData = (videoRef : React.RefObject<ReactPlayer>) => {
   const [timeoutId, addTimeoutId] = useState<number[]>([]);
   const timeoutRef = useRef<number | null> (null);
 
-
   // seeks to that % of the video
   function seek(time : number){
     if(videoRef.current && videoRef.current?.seekTo){
@@ -55,8 +54,6 @@ export const useVideoPlayerData = (videoRef : React.RefObject<ReactPlayer>) => {
     }
   }
 
-  
-
   const volumeIcon = () => {
     if(volume == 0 || isMuted){
       return faVolumeMute;
@@ -74,6 +71,7 @@ export const useVideoPlayerData = (videoRef : React.RefObject<ReactPlayer>) => {
   }
 
   const handleProgress = (time : OnProgressProps) => {
+    setCurrTime(time.played*100);
     if(isLooped && playing && time.played > convertSeconds(endSeconds)/100){
       setCurrTime(() => {
         const startTime = convertSeconds(startSeconds);

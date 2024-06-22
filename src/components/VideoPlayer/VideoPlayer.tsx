@@ -72,12 +72,12 @@ export function VideoPlayer(){
         
         <ReactPlayer 
           onReady={() => {
-            const dur = videoRef.current?.getDuration() ?? 0;
+            const dur = (videoRef.current?.getDuration() ?? 0) - 1;
             setPlaying(false);
             setDuration(dur);
-            setEndSeconds(Math.floor(dur));
+            setEndSeconds(dur);
             setEndMin(Math.trunc(dur/60));
-            setEndSec(Math.trunc((dur%60)-1));
+            setEndSec(Math.floor((dur%60)));
           }}
           className={vid.player}
           url = {url}
@@ -123,9 +123,9 @@ export function VideoPlayer(){
               </button>
               <div className={vid.timestamp}>
                 <p id={vid.currTime}>
-                  {format(new Date(currTime / 100 * (videoRef.current?.getDuration()??0) * 1000), "mm:ss")}
+                  {format(new Date((videoRef.current?.getCurrentTime() ??0) * 1000), "mm:ss")}
                   {" / "}
-                  {format(new Date((videoRef.current?.getDuration()??0) * 1000), "mm:ss")}
+                  {format(new Date(duration * 1000), "mm:ss")}
                 </p>
               </div>
               <div className={controls.volume} onMouseEnter={() => setShowVolume(true)}>
