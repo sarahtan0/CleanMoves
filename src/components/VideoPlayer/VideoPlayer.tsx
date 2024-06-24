@@ -123,7 +123,7 @@ export function VideoPlayer(){
               </button>
               <div className={vid.timestamp}>
                 <p id={vid.currTime}>
-                  {format(new Date((videoRef.current?.getCurrentTime() ??0) * 1000), "mm:ss")}
+                  {format(new Date(currTime / 100 * duration * 1000), "mm:ss")}
                   {" / "}
                   {format(new Date(duration * 1000), "mm:ss")}
                 </p>
