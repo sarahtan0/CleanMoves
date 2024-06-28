@@ -28,6 +28,10 @@ li {
     color: var(--txt);
   }
   
-  .navBar a:hover{
-    color: gray;
-  } 
+.navBar a:hover{
+  color: gray;
+} 
+
+.title{
+  font-size: 100px;
+}
