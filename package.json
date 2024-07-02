@@ -24,7 +24,6 @@
     "react-dom": "^18.2.0",
     "react-player": "^2.16.0",
     "react-router-dom": "^6.24.0",
-    "react-video-recorder": "^3.19.4",
     "styled-components": "^6.1.11"
   },
   "devDependencies": {
