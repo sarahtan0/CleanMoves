@@ -41,6 +41,7 @@
 #close{
     background-color: var(--white); 
     height: 10%;
+    color: var(--txt);
 }
 
 .countdown{
@@ -86,6 +87,7 @@ input[type="number"]{
     font-weight: bold;
     box-shadow: 3px 3px var(--shadow2);
     text-align: center;
+    background-color: white;
 }
 
 .startEnd{
@@ -154,6 +156,14 @@ hr{
     outline: none;
 }
 
+#speedOption, #leftSpeed{
+    color: var(--txt);
+}
+
+.unselected{
+    background-color: white;
+}
+
 .speeds{
     transform: scale(1);
     display: flex;
@@ -164,14 +174,18 @@ hr{
     border-color: var(--shadow2);
     border-radius: 0px 10px 10px 0px;
     outline: none;
+    color: var(--txt);
 }
 
 .selected{
     background-color: var(--highlight);
+    color: var(--txt);
 }
 
 .btn{
     border: 1px solid var(--shadow2);
+    color: var(--txt);
+    background-color: white;
 }
 
 .center{
@@ -195,3 +209,6 @@ hr{
     color: var(--txt);
 }
 
+h2, h4, label, p{
+    color: var(--txt);
+}

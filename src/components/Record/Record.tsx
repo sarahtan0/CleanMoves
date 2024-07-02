@@ -1,7 +1,14 @@
+import cn from "./Record.module.css"
 import VideoRecorder from 'react-video-recorder'
 
 export function Record(){
     return (
-        <p>hello</p>
+        <div>
+            <div className={cn.recorder}>
+                <VideoRecorder
+                    
+                />
+            </div>
+        </div>
     );
 }

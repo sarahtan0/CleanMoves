@@ -89,6 +89,7 @@
 }
 
 #url{
+    background-color: white;
     color: var(--txt);
     padding: 12px;
     border-radius: 10px;

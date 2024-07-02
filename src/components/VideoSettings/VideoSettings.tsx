@@ -148,13 +148,13 @@ export function VideoSettings({setOpenModal, currSpeed, setCurrSpeed, isLooped, 
                     <div className={settings.speed + ' ' + settings.section}>
                             <h4>Speed</h4>
                         <div className={settings.speeds}>
-                            <button className={' ' + (compareSpeed(0.25) && settings.selected)} id={settings.leftSpeed} 
+                            <button className={' ' + (compareSpeed(0.25) ? settings.selected : settings.unselected)} id={settings.leftSpeed} 
                                 onClick={() => setCurrSpeed(.25)}> 0.25 </button>
-                            <button className={' ' + (compareSpeed(0.5) && settings.selected)} id={settings.speedOption}
+                            <button className={' ' + (compareSpeed(0.5) ? settings.selected : settings.unselected)} id={settings.speedOption}
                                 onClick={() => setCurrSpeed(.5)}> 0.5 </button>
-                            <button className={' ' + (compareSpeed(0.75) && settings.selected)} id={settings.speedOption}
+                            <button className={' ' + (compareSpeed(0.75) ? settings.selected : settings.unselected)} id={settings.speedOption}
                                 onClick={() => setCurrSpeed(.75)}> 0.75 </button>
-                            <button className={' ' + (compareSpeed(1) && settings.selected)} id={settings.rightSpeed}
+                            <button className={' ' + (compareSpeed(1) ? settings.selected : settings.unselected)} id={settings.rightSpeed}
                                 onClick={() => setCurrSpeed(1)}> 1 </button>
 
                         </div>
