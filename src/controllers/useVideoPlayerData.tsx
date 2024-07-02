@@ -184,7 +184,7 @@ export const useVideoPlayerData = (videoRef : React.RefObject<ReactPlayer>) => {
       document.removeEventListener("fullscreenchange", onFullScreenChange);
       document.removeEventListener("keydown", handleKeyDown);
     }
-  }, [timeoutId, seekSeconds, isCountingDown, playing])
+  }, [timeoutId, seekSeconds, isCountingDown, playing, videoRef])
 
   return {
     url,setURL,
