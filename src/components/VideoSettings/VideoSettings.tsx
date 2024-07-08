@@ -196,7 +196,7 @@ export function VideoSettings({setOpenModal, currSpeed, setCurrSpeed, isLooped, 
                     </div>
                     <hr></hr>
                     <div>
-                        <h4 className={settings.lessPad}>Seeking</h4>
+                        <h4 className={settings.lessPad}>Skip Interval</h4>
                         <div>
                             <div className={settings.center}>
                                 <p>seek by {seekSeconds} seconds</p>
