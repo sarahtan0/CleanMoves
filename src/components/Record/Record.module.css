@@ -20,18 +20,15 @@
     box-shadow: 3px 3px var(--shadow2);
 }
 
-.recorder{
-    margin-top: 5%;
-}
-
 .viewer{
     display: flex;
-    justify-content: center;
-    transform: scaleX(-1);
+    /* justify-content: center;
+    align-items: center; */
 }
 
-.video{
-    width: 60vw;
+.camera{
+    height: 47vh;
+    overflow: hidden;
 }
 
 .topLine{
@@ -45,5 +42,9 @@
 
 button{
     height: 2%;
+}
+
+.flipped{
+    transform: scaleX(-1);
 }
 
