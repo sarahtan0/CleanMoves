@@ -75,6 +75,8 @@ export function VideoPlayer(){
             const dur = (videoRef.current?.getDuration() ?? 0) - 1;
             setPlaying(false);
             setDuration(dur);
+            setStartMin(0);
+            setStartSec(0);
             setEndSeconds(dur);
             setEndMin(Math.trunc(dur/60));
             setEndSec(Math.floor((dur%60)));

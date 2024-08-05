@@ -64,6 +64,14 @@ export function Record(){
                         width={"45vw"}
                     />
                 </div>
+                {/* <div className={cn.reactPlayer}>
+                    <ReactPlayer 
+                        ref={soundRef}
+                        url={url}
+                        controls={true}
+                        width={"10vw"}
+                    />
+                </div> */}
             </div>
             <div className={cn.recorder}>
                 <button onClick={recordVideo}>Record Video</button>
