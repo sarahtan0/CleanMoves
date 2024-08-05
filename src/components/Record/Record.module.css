@@ -40,11 +40,24 @@
     align-items: center;
 }
 
-button{
-    height: 2%;
-}
 
 .flipped{
     transform: scaleX(-1);
+}
+
+.recordBookmark{
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+.bookmarkContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bookmarkContainer > div {
+    display: flex;
+    gap: 8%;
 }
 

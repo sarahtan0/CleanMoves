@@ -4,11 +4,14 @@ import {useEffect, useState, useRef} from "react"
 import ReactPlayer from "react-player"
 
 export function Record(){
+    const videoRef = useRef<ReactPlayer>(null);
     const { createRecording, openCamera, startRecording, stopRecording, download, activeRecordings} = useRecordWebcam();
     const [recording, setRecording] = useState<any>(null);
     const [finishedRecording, setFinishedRecording] = useState(false);
     const [url, setUrl] = useState('https://www.youtube.com/watch?v=lDRkALaSjzU');
-    const videoRef = useRef<ReactPlayer>(null);
+    const [startTime, setStartTime] = useState(0);
+    const [endTime, setEndTime] = useState(0);
+    const [playing, setPlaying] = useState(false);
 
     useEffect(() => {
         const initCamera = async () => {
@@ -27,13 +30,23 @@ export function Record(){
     const recordVideo = async () => {
         await openCamera(recording.id);
         await startRecording(recording.id);
-        // await new Promise(resolve => setTimeout(resolve, 3000)); // Record for 3 seconds
+        let time = 0;
+        if(endTime - startTime > 0){
+            time = (endTime - startTime)*1000;
+        }
+        await new Promise(resolve => setTimeout(resolve, time)); // Record for 3 seconds
+        stopVideo();
     };
 
     const stopVideo = async () => {
         setFinishedRecording(true);
         await stopRecording(recording.id);
         await download(recording.id); // Download the recording
+    }
+
+    const playAudio = () => {
+        videoRef.current?.seekTo(startTime);
+        setPlaying(true);
     }
     
     return (
@@ -62,21 +75,34 @@ export function Record(){
                         controls={true}
                         height={"47vh"}
                         width={"45vw"}
+                        onReady={() => {
+                            setEndTime(videoRef.current?.getDuration()??0);
+                        }}
+                        playing={playing}
                     />
                 </div>
-                {/* <div className={cn.reactPlayer}>
-                    <ReactPlayer 
-                        ref={soundRef}
-                        url={url}
-                        controls={true}
-                        width={"10vw"}
-                    />
-                </div> */}
             </div>
-            <div className={cn.recorder}>
-                <button onClick={recordVideo}>Record Video</button>
-                <button onClick={stopVideo}>Stop Recording</button>
-                <button>New Recording</button>
+            <div className={cn.recordBookmark}>
+                <div className={cn.recorder}>
+                    <button onClick={() => {
+                        recordVideo();
+                        playAudio();
+                        }
+                    }>
+                        Record Video</button>
+                    <button onClick={stopVideo}>Stop Recording</button>
+                    <button>New Recording</button>
+                </div>
+                <div className={cn.bookmarkContainer}>
+                    <div>
+                        <button onClick={()=>setStartTime(Math.trunc(videoRef.current?.getCurrentTime()??0))}>START</button>
+                        {startTime}
+                    </div>
+                    <div>
+                        <button onClick={()=>setEndTime(Math.trunc(videoRef.current?.getCurrentTime()??0))}>END</button>
+                        {endTime}
+                    </div>
+                </div>
             </div>
         </div>
     );
