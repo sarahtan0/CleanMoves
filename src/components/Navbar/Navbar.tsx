@@ -1,7 +1,7 @@
 import nav from "./Navbar.module.css"
-import {NavLink, useLocation} from 'react-router-dom'
-import {useState, useEffect} from "react"
-import {PracticeHelp} from "../Help/PracticeHelp"
+import { NavLink, useLocation } from 'react-router-dom'
+import { useState, useEffect } from "react"
+import { PracticeHelp } from "../Help/PracticeHelp"
 
 export function Navbar(){
     const [currPage, setCurrPage] = useState("");

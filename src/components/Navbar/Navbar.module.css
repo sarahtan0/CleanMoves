@@ -22,7 +22,9 @@ li {
     align-items: center;
     justify-content: space-between;
     background-color: var(--white);
+    z-index: 3;
   }
+  
 .navBar a{
     padding: 22px;
     color: var(--txt);

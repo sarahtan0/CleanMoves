@@ -121,6 +121,8 @@ export function VideoSettings({setOpenModal, currSpeed, setCurrSpeed, isLooped, 
         }
     }
 
+    
+
     return (
         <div className={settings.background + ' ' + (isFullScreen && settings.fullscreen)}>
             <div className={settings.container}>
