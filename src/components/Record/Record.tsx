@@ -35,6 +35,13 @@ export function Record(){
 
     videoElement?.addEventListener("play", () => {
         console.log(videoElement.currentTime);
+        videoRef.current?.seekTo((startTime + videoElement.currentTime), "seconds");
+        setPlaying(true);
+        console.log(playing);
+    })
+
+    videoElement?.addEventListener("pause", () => {
+        setPlaying(false);
     })
 
     const recordVideo = async () => {
@@ -55,7 +62,7 @@ export function Record(){
 
         console.log(recording.objectURL);
         muteRecording(recording.id);
-        await download(recording.id); // Download the recording
+        // await download(recording.id); // Download the recording
     }
 
     const playAudio = () => {
@@ -109,11 +116,11 @@ export function Record(){
                 </div>
                 <div className={cn.bookmarkContainer}>
                     <div>
-                        <button onClick={()=>setStartTime(Math.trunc(videoRef.current?.getCurrentTime()??0))}>START</button>
+                        <button onClick={()=>setStartTime(videoRef.current?.getCurrentTime()??0)}>START</button>
                         {startTime}
                     </div>
                     <div>
-                        <button onClick={()=>setEndTime(Math.trunc(videoRef.current?.getCurrentTime()??0))}>END</button>
+                        <button onClick={()=>setEndTime(videoRef.current?.getCurrentTime()??0)}>END</button>
                         {endTime}
                     </div>
                 </div>
