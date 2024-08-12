@@ -1,6 +1,6 @@
 import cn from "./PracticeHelp.module.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark, faBookmark } from '@fortawesome/free-solid-svg-icons'
+import { faXmark } from '@fortawesome/free-solid-svg-icons'
 
 export function PracticeHelp(){
     return(

@@ -33,7 +33,7 @@ export function Record(){
         initCamera();
     }, []);
 
-    videoElement?.addEventListener("play", (event)=> {
+    videoElement?.addEventListener("play", () => {
         console.log(videoElement.currentTime);
     })
 
