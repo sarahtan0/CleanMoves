@@ -5,13 +5,22 @@ import ReactPlayer from "react-player"
 
 export function Record(){
     const videoRef = useRef<ReactPlayer>(null);
-    const { createRecording, openCamera, startRecording, stopRecording, download, activeRecordings} = useRecordWebcam();
+    const { 
+        createRecording, 
+        openCamera, 
+        startRecording, 
+        stopRecording, 
+        download, 
+        activeRecordings, 
+        muteRecording
+    } = useRecordWebcam();
     const [recording, setRecording] = useState<any>(null);
     const [finishedRecording, setFinishedRecording] = useState(false);
     const [url, setUrl] = useState('https://www.youtube.com/watch?v=lDRkALaSjzU');
     const [startTime, setStartTime] = useState(0);
     const [endTime, setEndTime] = useState(0);
     const [playing, setPlaying] = useState(false);
+    const videoElement = document.querySelector("#playback") as HTMLVideoElement;
 
     useEffect(() => {
         const initCamera = async () => {
@@ -20,12 +29,13 @@ export function Record(){
             if(!newRecording?.id) return;
             setRecording(newRecording);
             await openCamera(newRecording.id);
-            console.log(recording.id);
         }
-
         initCamera();
-
     }, []);
+
+    videoElement?.addEventListener("play", (event)=> {
+        console.log(videoElement.currentTime);
+    })
 
     const recordVideo = async () => {
         await openCamera(recording.id);
@@ -41,6 +51,10 @@ export function Record(){
     const stopVideo = async () => {
         setFinishedRecording(true);
         await stopRecording(recording.id);
+        setPlaying(false);
+
+        console.log(recording.objectURL);
+        muteRecording(recording.id);
         await download(recording.id); // Download the recording
     }
 
@@ -64,7 +78,7 @@ export function Record(){
                         <video className={cn.camera + ' ' + cn.flipped} ref={recording.webcamRef} autoPlay />
                     }
                     { finishedRecording && 
-                        <video className={cn.camera} ref={recording.previewRef} controls />
+                        <video className={cn.camera} id = "playback" ref={recording.previewRef} controls />
                     }
                 </div>
             ))}
