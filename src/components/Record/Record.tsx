@@ -21,6 +21,7 @@ export function Record(){
     const [endTime, setEndTime] = useState(0);
     const [playing, setPlaying] = useState(true);
     const videoElement = document.querySelector("#playback") as HTMLVideoElement;
+    const [viewOnly, setViewOnly] = useState(false);
 
     videoElement?.addEventListener("play", () => {
         console.log(videoElement.currentTime);
@@ -48,11 +49,13 @@ export function Record(){
         await stopRecording(recording.id);
         setPlaying(false);
         // await download(recording.id); // Download the recording
+        setViewOnly(false);
     }
 
     const playAudio = () => {
         videoRef.current?.seekTo(startTime);
         setPlaying(true);
+        setViewOnly(true);
     }
 
     const newVideo = () => {
@@ -98,7 +101,7 @@ export function Record(){
                     }
                 </div>
             ))}
-                <div className={cn.reactPlayer}>
+                <div className={cn.reactPlayer + ' ' + (viewOnly && cn.viewOnly)}>
                     <ReactPlayer 
                         ref={videoRef}
                         url={url}
