@@ -10,34 +10,22 @@ export function Record(){
         openCamera, 
         startRecording, 
         stopRecording, 
-        download, 
+        clearPreview,
         activeRecordings, 
-        muteRecording
     } = useRecordWebcam();
+
     const [recording, setRecording] = useState<any>(null);
     const [finishedRecording, setFinishedRecording] = useState(false);
-    const [url, setUrl] = useState('https://www.youtube.com/watch?v=lDRkALaSjzU');
+    const [url, setUrl] = useState('https://www.youtube.com/watch?v=VfnpetaEXUE');
     const [startTime, setStartTime] = useState(0);
     const [endTime, setEndTime] = useState(0);
-    const [playing, setPlaying] = useState(false);
+    const [playing, setPlaying] = useState(true);
     const videoElement = document.querySelector("#playback") as HTMLVideoElement;
-
-    useEffect(() => {
-        const initCamera = async () => {
-            const newRecording = await createRecording();
-            // returns nothing if there is no id
-            if(!newRecording?.id) return;
-            setRecording(newRecording);
-            await openCamera(newRecording.id);
-        }
-        initCamera();
-    }, []);
 
     videoElement?.addEventListener("play", () => {
         console.log(videoElement.currentTime);
         videoRef.current?.seekTo((startTime + videoElement.currentTime), "seconds");
         setPlaying(true);
-        console.log(playing);
     })
 
     videoElement?.addEventListener("pause", () => {
@@ -51,7 +39,7 @@ export function Record(){
         if(endTime - startTime > 0){
             time = (endTime - startTime)*1000;
         }
-        await new Promise(resolve => setTimeout(resolve, time)); // Record for 3 seconds
+        await new Promise(resolve => setTimeout(resolve, time)); 
         stopVideo();
     };
 
@@ -59,9 +47,6 @@ export function Record(){
         setFinishedRecording(true);
         await stopRecording(recording.id);
         setPlaying(false);
-
-        console.log(recording.objectURL);
-        muteRecording(recording.id);
         // await download(recording.id); // Download the recording
     }
 
@@ -69,23 +54,47 @@ export function Record(){
         videoRef.current?.seekTo(startTime);
         setPlaying(true);
     }
+
+    const newVideo = () => {
+        clearPreview(recording.id);
+        setFinishedRecording(false);
+        initCamera();
+    }
     
+    const initCamera = async () => {
+        const newRecording = await createRecording();
+        // returns nothing if there is no id
+        if(!newRecording?.id) return;
+        setRecording(newRecording);
+
+        await openCamera(newRecording.id);
+    }
+    useEffect(() => {
+        initCamera();
+    }, []);
+    
+    const loadVideo = async () => {
+        setPlaying(true);
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        setPlaying(false);
+    }
     return (
         <div>
             <div className={cn.topLine}>
                 <input className={cn.url}
                 placeholder="Paste YouTube Link"
-                onChange={(link)=>setUrl(link.target.value)}></input>
-                <button>GEAR</button>
+                onChange={(link)=>{
+                    setUrl(link.target.value);
+                    }}></input>
             </div>
             <div className={cn.viewer}>
             {activeRecordings.map(recording => (
                 <div key={recording.id}>
                     { !finishedRecording && 
-                        <video className={cn.camera + ' ' + cn.flipped} ref={recording.webcamRef} autoPlay />
+                        <video className={cn.camera + ' ' + cn.flipped} ref={recording.webcamRef} autoPlay muted/>
                     }
-                    { finishedRecording && 
-                        <video className={cn.camera} id = "playback" ref={recording.previewRef} controls />
+                    { finishedRecording &&
+                        <video className={cn.camera} id = "playback" ref={recording.previewRef} controls muted/>
                     }
                 </div>
             ))}
@@ -98,8 +107,10 @@ export function Record(){
                         width={"45vw"}
                         onReady={() => {
                             setEndTime(videoRef.current?.getDuration()??0);
+                            loadVideo();
                         }}
                         playing={playing}
+                        light={false}
                     />
                 </div>
             </div>
@@ -112,16 +123,22 @@ export function Record(){
                     }>
                         Record Video</button>
                     <button onClick={stopVideo}>Stop Recording</button>
-                    <button>New Recording</button>
+                    {finishedRecording && 
+                        <button onClick={newVideo}>New Recording</button>
+                    }
                 </div>
                 <div className={cn.bookmarkContainer}>
                     <div>
                         <button onClick={()=>setStartTime(videoRef.current?.getCurrentTime()??0)}>START</button>
-                        {startTime}
+                        <div className={cn.timestamp}>
+                            {startTime}
+                        </div>
                     </div>
                     <div>
                         <button onClick={()=>setEndTime(videoRef.current?.getCurrentTime()??0)}>END</button>
-                        {endTime}
+                        <div className={cn.timestamp}>
+                            {endTime}
+                        </div>
                     </div>
                 </div>
             </div>

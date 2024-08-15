@@ -29,6 +29,7 @@
 .camera{
     height: 47vh;
     overflow: hidden;
+
 }
 
 .topLine{
@@ -47,13 +48,14 @@
 
 .recordBookmark{
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: 60% auto;
 }
 
 .bookmarkContainer{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 90%;
 }
 
 .bookmarkContainer > div {
@@ -61,3 +63,12 @@
     gap: 8%;
 }
 
+.recorder{
+    display: flex;
+    gap: 10px;
+}
+
+.timestamp{
+    display: flex;
+    align-items: center;
+}
