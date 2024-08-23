@@ -7,18 +7,6 @@ export function Navbar(){
     const [currPage, setCurrPage] = useState("");
     const [pracHelpOpen, setPracHelpOpen] = useState(false);
     let location = useLocation();
-    
-    useEffect(() => {
-        setCurrPage(location.pathname);
-        const handleKeyDown = (event: KeyboardEvent) => {
-            switch(event.key){
-                case "h":
-                    setPracHelpOpen((prev) => !prev)
-            }
-        }
-
-        document.addEventListener("keydown", handleKeyDown);
-    }, [location])
 
     const help = () => {
         if(currPage == "/practice"){
@@ -26,6 +14,25 @@ export function Navbar(){
         }
         //add another for record screen
     }
+    
+    useEffect(() => {
+        setCurrPage(location.pathname);
+        const handleKeyDown = (event: KeyboardEvent) => {
+            switch(event.key){
+                case "h":
+                    if(currPage == "/practice") {
+                        setPracHelpOpen(prev => !prev);
+                        console.log(pracHelpOpen);
+                    };
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        document.addEventListener("keydown", handleKeyDown);
+    }, [location, currPage])
+
 
     return (
         <div>
@@ -46,7 +53,8 @@ export function Navbar(){
             {pracHelpOpen && 
                 <PracticeHelp 
                     setOpen = {setPracHelpOpen}    
-                />}
+                />
+            }
         </div>
     );
 }
