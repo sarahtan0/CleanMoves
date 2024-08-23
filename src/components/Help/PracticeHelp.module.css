@@ -1,5 +1,5 @@
 :root{
-    --background: #b1def0;
+    --background: #c8ecfa;
     --white: #ebf4f7;
     --txt: #3e4f57;
     --shadow: #587682;
@@ -34,7 +34,7 @@
 .container {
     width: 70%;
     height: 60%;
-    background-color: #c8ecfa;
+    background-color: var(--background);
     border-radius: 10px;
     display: block;
 }
@@ -53,11 +53,18 @@
 
 .tabs > div {
     font-size: 18px;
-    background-color: var(--white);
     padding: 10px;  
     border-radius: 5px 5px 0px 0px;
     width: 20%;
     text-align: center;
+}
+
+.unselected{
+    background-color: var(--background);
+}
+
+.selected {
+    background-color: var(--white);
 }
 
 .content{
@@ -65,4 +72,8 @@
     background-color: var(--white);
     border-radius: 5px 5px 5px 5px;
     height: 100%;
+}
+
+.content > div{
+    padding: 5%;
 }
