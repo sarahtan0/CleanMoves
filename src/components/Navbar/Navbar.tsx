@@ -10,6 +10,14 @@ export function Navbar(){
     
     useEffect(() => {
         setCurrPage(location.pathname);
+        const handleKeyDown = (event: KeyboardEvent) => {
+            switch(event.key){
+                case "h":
+                    setPracHelpOpen((prev) => !prev)
+            }
+        }
+
+        document.addEventListener("keydown", handleKeyDown);
     }, [location])
 
     const help = () => {
@@ -36,7 +44,9 @@ export function Navbar(){
                 </ul>
             </div>
             {pracHelpOpen && 
-                <PracticeHelp />}
+                <PracticeHelp 
+                    setOpen = {setPracHelpOpen}    
+                />}
         </div>
     );
 }

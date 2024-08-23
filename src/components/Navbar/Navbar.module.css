@@ -22,7 +22,7 @@ li {
     align-items: center;
     justify-content: space-between;
     background-color: var(--white);
-    z-index: 3;
+    z-index: 1;
   }
   
 .navBar a{
