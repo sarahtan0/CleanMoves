@@ -81,6 +81,15 @@ export function Record(){
         await new Promise(resolve => setTimeout(resolve, 1000));
         setPlaying(false);
     }
+
+    const convertToMin = (seconds: number) => {
+        return String(Math.trunc(seconds/60)).padStart(2, '0');
+    }
+
+    const convertToSec = (seconds: number) => {
+        return String(Math.trunc(seconds%60)).padStart(2,'0');
+    }
+
     return (
         <div>
             <div className={cn.topLine}>
@@ -92,55 +101,65 @@ export function Record(){
             </div>
             <div className={cn.viewer}>
             {activeRecordings.map(recording => (
-                <div key={recording.id}>
-                    { !finishedRecording && 
-                        <video className={cn.camera + ' ' + cn.flipped} ref={recording.webcamRef} autoPlay muted/>
-                    }
-                    { finishedRecording &&
-                        <video className={cn.camera} id = "playback" ref={recording.previewRef} controls muted/>
-                    }
+                <div>
+                    <div key={recording.id}>
+                        { !finishedRecording && 
+                            <video className={cn.camera + ' ' + cn.flipped} ref={recording.webcamRef} autoPlay muted/>
+                        }
+                        { finishedRecording &&
+                            <video className={cn.camera} id = "playback" ref={recording.previewRef} controls muted/>
+                        }
+                    </div>
+                    <div className={cn.recordBtns}>
+                        <button onClick={() => {
+                            recordVideo();
+                            playAudio();
+                            }
+                        }>
+                            Record Video</button>
+                        <button onClick={stopVideo}>Stop Recording</button>
+                        {finishedRecording && 
+                            <button onClick={newVideo}>New Recording</button>
+                        }
+                    </div>
                 </div>
             ))}
                 <div className={cn.reactPlayer + ' ' + (viewOnly && cn.viewOnly)}>
-                    <ReactPlayer 
-                        ref={videoRef}
-                        url={url}
-                        controls={true}
-                        height={"47vh"}
-                        width={"45vw"}
-                        onReady={() => {
-                            setEndTime(videoRef.current?.getDuration()??0);
-                            loadVideo();
-                        }}
-                        playing={playing}
-                        light={false}
-                    />
-                </div>
-            </div>
-            <div className={cn.recordBookmark}>
-                <div className={cn.recorder}>
-                    <button onClick={() => {
-                        recordVideo();
-                        playAudio();
-                        }
-                    }>
-                        Record Video</button>
-                    <button onClick={stopVideo}>Stop Recording</button>
-                    {finishedRecording && 
-                        <button onClick={newVideo}>New Recording</button>
-                    }
-                </div>
-                <div className={cn.bookmarkContainer}>
                     <div>
-                        <button onClick={()=>setStartTime(videoRef.current?.getCurrentTime()??0)}>START</button>
-                        <div className={cn.timestamp}>
-                            {startTime}
-                        </div>
+                        <ReactPlayer 
+                            ref={videoRef}
+                            url={url}
+                            controls={true}
+                            height={"47vh"}
+                            width={"45vw"}
+                            onReady={() => {
+                                setEndTime(videoRef.current?.getDuration()??0);
+                                loadVideo();
+                            }}
+                            playing={playing}
+                            light={false}
+                        />
                     </div>
-                    <div>
-                        <button onClick={()=>setEndTime(videoRef.current?.getCurrentTime()??0)}>END</button>
-                        <div className={cn.timestamp}>
-                            {endTime}
+                    <div className={cn.bookmarkContainer}>
+                        <div>
+                            <button onClick={()=>setStartTime(videoRef.current?.getCurrentTime()??0)}>START</button>
+                            <div className={cn.timestamp}>
+                                <div className={cn.numberOutline}>
+                                    {convertToMin(startTime)}
+                                    {' ' + ':' + ' '}
+                                    {convertToSec(startTime)}
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <button onClick={()=>setEndTime(videoRef.current?.getCurrentTime()??0)}>END</button>
+                            <div className={cn.timestamp}>
+                                <div className={cn.numberOutline}>
+                                    {convertToMin(endTime)}
+                                    {' ' + ':' + ' '}
+                                    {convertToSec(endTime)}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
