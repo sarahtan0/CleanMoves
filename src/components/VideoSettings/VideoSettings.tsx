@@ -201,7 +201,7 @@ export function VideoSettings({setOpenModal, currSpeed, setCurrSpeed, isLooped, 
                         <h4 className={settings.lessPad}>Skip Interval</h4>
                         <div>
                             <div className={settings.center}>
-                                <p>seek by {seekSeconds} seconds</p>
+                                <p>Skip by {seekSeconds} seconds</p>
                             </div>
                             <div className={settings.center}>
                                 <Box width={200} display="flex" alignItems="center">
