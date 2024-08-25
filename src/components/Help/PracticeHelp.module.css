@@ -23,6 +23,7 @@
 #closeBtn {
     background: transparent;
     padding: 0px 15px 0px 15px;
+    border-radius: 200px;
 }
 
 .container {
@@ -69,4 +70,8 @@
 
 .content > div{
     padding: 5%;
+}
+
+.hover {
+    background-color: var(--shadow2);
 }

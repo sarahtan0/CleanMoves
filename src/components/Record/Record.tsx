@@ -16,12 +16,24 @@ export function Record(){
 
     const [recording, setRecording] = useState<any>(null);
     const [finishedRecording, setFinishedRecording] = useState(false);
-    const [url, setUrl] = useState('https://www.youtube.com/watch?v=VfnpetaEXUE');
+    const [url, setUrl] = useState('https://www.youtube.com/watch?v=cDQdR6i4W9o');
     const [startTime, setStartTime] = useState(0);
     const [endTime, setEndTime] = useState(0);
     const [playing, setPlaying] = useState(true);
     const videoElement = document.querySelector("#playback") as HTMLVideoElement;
     const [viewOnly, setViewOnly] = useState(false);
+
+    const initCamera = async () => {
+        const newRecording = await createRecording();
+        // returns nothing if there is no id
+        if(!newRecording?.id) return;
+        setRecording(newRecording);
+        await openCamera(newRecording.id);
+    }
+
+    useEffect(() => {
+        initCamera();
+    }, []);
 
     videoElement?.addEventListener("play", () => {
         console.log(videoElement.currentTime);
@@ -60,21 +72,9 @@ export function Record(){
 
     const newVideo = () => {
         clearPreview(recording.id);
+        openCamera(recording.id);
         setFinishedRecording(false);
-        initCamera();
     }
-    
-    const initCamera = async () => {
-        const newRecording = await createRecording();
-        // returns nothing if there is no id
-        if(!newRecording?.id) return;
-        setRecording(newRecording);
-
-        await openCamera(newRecording.id);
-    }
-    useEffect(() => {
-        initCamera();
-    }, []);
     
     const loadVideo = async () => {
         setPlaying(true);
