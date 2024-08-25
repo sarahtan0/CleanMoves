@@ -3,7 +3,6 @@ import ReactPlayer from 'react-player';
 import {faVolumeLow, faVolumeMute,faVolumeHigh} from "@fortawesome/free-solid-svg-icons"
 import { OnProgressProps } from 'react-player/base';
 
-
 export const useVideoPlayerData = (videoRef : React.RefObject<ReactPlayer>) => {
   const BASEURL = "https://www.youtube.com/watch?v=JKp80jCzho0";
   const [url, setURL] = useState(BASEURL);
