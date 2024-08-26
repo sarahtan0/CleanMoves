@@ -29,13 +29,13 @@ export function Navbar(){
             }
         }
         document.addEventListener("keydown", handleKeyDown);
-        
+
         return () => {
             document.removeEventListener("keydown", handleKeyDown);
         }
     }, [location, currPage, pracHelpOpen])
 
-
+console.log(pracHelpOpen);
     return (
         <div>
             <div className={nav.navBar}>
