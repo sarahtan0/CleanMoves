@@ -20,7 +20,7 @@ export function Navbar(){
         const handleKeyDown = (event: KeyboardEvent) => {
             switch(event.key){
                 case "h":
-                    if(currPage == "/practice") {
+                    if(currPage == "/practice" || currPage == "/") {
                         setPracHelpOpen(prev => !prev);
                     }
                     break;
@@ -35,7 +35,6 @@ export function Navbar(){
         }
     }, [location, currPage, pracHelpOpen])
 
-console.log(pracHelpOpen);
     return (
         <div>
             <div className={nav.navBar}>
