@@ -102,71 +102,72 @@ export const useVideoPlayerData = (videoRef : React.RefObject<ReactPlayer>) => {
     const onFullScreenChange = () => document.fullscreenElement ? setIsFullScreen(true) : setIsFullScreen(false);
     const handleKeyDown = (event: KeyboardEvent) => {
       const seekTime = seekSeconds / (videoRef.current?.getDuration() ?? 1) * 100;
-        switch(event.key){
-          case " ":
-            event.preventDefault();
-            setPlaying(prevPlay => !prevPlay);
-            break;
-          case "ArrowLeft":
-            setCurrTime(prev => {
-              // you have to seek inside setCurrTime because state updates are put in a queue, so calling seek outside doesn't ensure it uses the most recent val
-              const newTime = prev - seekTime;
-              if(newTime < 0){
-                seek(0);
-              } else {
-                seek(newTime);
-              }
-              return newTime;
-            });
-            break;
-          case "ArrowRight":
-            setCurrTime(prev => {
-              const newTime = prev + seekTime;
-              if(newTime > 100){
-                seek(100);
-              } else {
-                seek(newTime);
-              }
-              // returns the value it will seek to
-              return newTime;
-            })
-            break;
-          case "0":
-            setCurrTime(() => {
+      switch(event.key){
+        case " ":
+          event.preventDefault();
+          setPlaying(prevPlay => !prevPlay);
+          break;
+        case "ArrowLeft":
+          setCurrTime(prev => {
+            // you have to seek inside setCurrTime because state updates are put in a queue, 
+            //so calling seek outside doesn't ensure it uses the most recent val
+            const newTime = prev - seekTime;
+            if(newTime < 0){
               seek(0);
-              return 0;
-            })
-            break;
-          case "l":
-            setCurrTime(prev => {
-              const newTime = prev + 10 / (videoRef.current?.getDuration() ?? 1) * 100;
+            } else {
               seek(newTime);
-              return newTime;
-            })
-            break;
-          case "j":
-            setCurrTime(prev => {
-              const newTime = prev - 10 / (videoRef.current?.getDuration() ?? 1) * 100;
+            }
+            return newTime;
+          });
+          break;
+        case "ArrowRight":
+          setCurrTime(prev => {
+            const newTime = prev + seekTime;
+            if(newTime > 100){
+              seek(100);
+            } else {
               seek(newTime);
-              return newTime;
-            })
-            break;
-          case "s":
-            setOpenModal(prevModal => !prevModal);
-            break;
-          case "f":
-            setIsFullScreen(prev => !prev);
-            toggleFullScreen();
-            break;
-          case "r":
-            setInverted(prev => !prev);
-            break;
-          case "m":
-            setIsMuted(prev => !prev);
-            break;
-          default:
-            break;
-        }
+            }
+            // returns the value it will seek to
+            return newTime;
+          })
+          break;
+        case "0":
+          setCurrTime(() => {
+            seek(0);
+            return 0;
+          })
+          break;
+        case "l":
+          setCurrTime(prev => {
+            const newTime = prev + 10 / (videoRef.current?.getDuration() ?? 1) * 100;
+            seek(newTime);
+            return newTime;
+          })
+          break;
+        case "j":
+          setCurrTime(prev => {
+            const newTime = prev - 10 / (videoRef.current?.getDuration() ?? 1) * 100;
+            seek(newTime);
+            return newTime;
+          })
+          break;
+        case "s":
+          setOpenModal(prevModal => !prevModal);
+          break;
+        case "f":
+          setIsFullScreen(prev => !prev);
+          toggleFullScreen();
+          break;
+        case "r":
+          setInverted(prev => !prev);
+          break;
+        case "m":
+          setIsMuted(prev => !prev);
+          break;
+        default:
+          break;
+      }
     }
       document.addEventListener("fullscreenchange", onFullScreenChange);
       document.addEventListener("keydown", handleKeyDown);

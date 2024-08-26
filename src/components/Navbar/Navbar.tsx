@@ -22,23 +22,25 @@ export function Navbar(){
                 case "h":
                     if(currPage == "/practice") {
                         setPracHelpOpen(prev => !prev);
-                        console.log(pracHelpOpen);
-                    };
+                    }
                     break;
                 default:
                     break;
             }
         }
-
         document.addEventListener("keydown", handleKeyDown);
-    }, [location, currPage])
+        
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+        }
+    }, [location, currPage, pracHelpOpen])
 
 
     return (
         <div>
             <div className={nav.navBar}>
                 <h2>CleanMoves</h2>
-                <ul>
+                <ol className={nav.navList}>
                     <li>
                         <NavLink to="/practice">Practice</NavLink>
                     </li>
@@ -48,7 +50,7 @@ export function Navbar(){
                     <li>
                         <a onClick={help}>Help</a>
                     </li>
-                </ul>
+                </ol>
             </div>
             {pracHelpOpen && 
                 <PracticeHelp 

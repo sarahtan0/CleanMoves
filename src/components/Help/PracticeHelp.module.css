@@ -79,3 +79,8 @@
 
 .table {
 }
+
+.bulletPoints > li{
+    list-style-type: disc;
+    display: list-item;
+}
