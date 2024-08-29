@@ -2,6 +2,7 @@ import cn from "./Record.module.css"
 import { useRecordWebcam } from 'react-record-webcam'
 import {useEffect, useState, useRef} from "react"
 import ReactPlayer from "react-player"
+import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 
 export function Record(){
     const videoRef = useRef<ReactPlayer>(null);
@@ -14,7 +15,8 @@ export function Record(){
         activeRecordings, 
     } = useRecordWebcam();
 
-    const [recording, setRecording] = useState<any>(null);
+    const [recordingComponent, setRecordingComponent] = useState<any>(null);
+    const [recording, setRecording] = useState(false);
     const [finishedRecording, setFinishedRecording] = useState(false);
     const [url, setUrl] = useState('https://www.youtube.com/watch?v=cDQdR6i4W9o');
     const [startTime, setStartTime] = useState(0);
@@ -27,7 +29,7 @@ export function Record(){
         const newRecording = await createRecording();
         // returns nothing if there is no id
         if(!newRecording?.id) return;
-        setRecording(newRecording);
+        setRecordingComponent(newRecording);
         await openCamera(newRecording.id);
     }
 
@@ -46,8 +48,8 @@ export function Record(){
     })
 
     const recordVideo = async () => {
-        await openCamera(recording.id);
-        await startRecording(recording.id);
+        await openCamera(recordingComponent.id);
+        await startRecording(recordingComponent.id);
         let time = 0;
         if(endTime - startTime > 0){
             time = (endTime - startTime)*1000;
@@ -58,7 +60,7 @@ export function Record(){
 
     const stopVideo = async () => {
         setFinishedRecording(true);
-        await stopRecording(recording.id);
+        await stopRecording(recordingComponent.id);
         setPlaying(false);
         // await download(recording.id); // Download the recording
         setViewOnly(false);
@@ -70,9 +72,20 @@ export function Record(){
         setViewOnly(true);
     }
 
+    const handleRecording = async () => {
+        if(!recording){
+            recordVideo();
+            playAudio();
+            setRecording(true);
+        } else {
+            stopVideo();
+            setRecording(false);
+        }
+    }
+
     const newVideo = () => {
-        clearPreview(recording.id);
-        openCamera(recording.id);
+        clearPreview(recordingComponent.id);
+        openCamera(recordingComponent.id);
         setFinishedRecording(false);
     }
     
@@ -111,13 +124,9 @@ export function Record(){
                         }
                     </div>
                     <div className={cn.recordBtns}>
-                        <button onClick={() => {
-                            recordVideo();
-                            playAudio();
-                            }
-                        }>
-                            Record Video</button>
-                        <button onClick={stopVideo}>Stop Recording</button>
+                        <button onClick={handleRecording}>
+                            <RadioButtonCheckedIcon style={{color:"red"}}/>
+                        </button>
                         {finishedRecording && 
                             <button onClick={newVideo}>New Recording</button>
                         }
