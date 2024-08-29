@@ -67,20 +67,35 @@
     border-radius: 5px 5px 5px 5px;
     height: 91%;
     overflow: auto;
+    display: flex;
+    justify-content: center;
 }
 
 .content > div{
     padding: 20px 60px;
+    margin-top: 20px;
 }
 
 .hover {
     background-color: var(--shadow2);
 }
 
-.table {
-}
-
-.bulletPoints > li{
+li{
     list-style-type: disc;
     display: list-item;
+    font-size: 18px;
+}
+
+h3, p, li, .tabs > div {
+    color: var(--txt);
+}
+
+.accordions {
+    width: 100%;
+}
+
+h3{
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 10px;
 }
