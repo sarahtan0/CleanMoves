@@ -74,6 +74,7 @@
     margin-left: 5px;
     margin-right: 5px;
     font-weight: 500;
+    color: black;
 }
 
 .viewOnly {
@@ -84,4 +85,9 @@
     margin-top: 2px;
     display: flex;
     justify-content: space-evenly;
+}
+
+.recordBtns > button, .bookmarkContainer > div > button {
+    background-color: white;
+    color: var(--txt);
 }

@@ -76,7 +76,6 @@ export function PracticeHelp({setOpen}: PracticeHelpProps){
                 {checkTab('keybind') && 
                 <div>
                     <div>
-                        <h3>YouTube Keybinds</h3>
                         <div className={cn.table}>
                             <p>Left Arrow: Skip the video backwards the set seconds in settings</p>
                             <p>Right Arrow: Skip the video forwards the set seconds in settings</p>
