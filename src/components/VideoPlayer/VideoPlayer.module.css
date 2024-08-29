@@ -57,6 +57,8 @@
 
 #currTime{
     color: white;
+    font-size: 15px;
+    white-space: nowrap;
 }
 
 .timestamp{
