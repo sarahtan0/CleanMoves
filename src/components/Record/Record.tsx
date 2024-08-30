@@ -113,13 +113,33 @@ export function Record(){
             transform: 'scale(0.5)',
             borderRadius: '20%'
         },
+        shrink: {
+            transform: 'scale(0.7)',
+            borderRadius: '100%'
+        },
         empty: {
             transform: 'scale(0)',
             borderRadius: '100%'
         }
     }
 
+    const outerCircleVariants: Variants = {
+        circle: {
+            transform: 'scale(1)',
+            borderRadius: '100%'
+        },
+        bigger: {
+            transform: 'scale(1.3)',
+            borderRadius: '100%'
+        },
+        medium: {
+            transform: 'scale(1.1)',
+            borderRadius: '100%'
+        }
+    }
+
     const innerCircleAnimation = useAnimation();
+    const outerCircleAnimation = useAnimation();
 
     return (
         <div>
@@ -148,19 +168,33 @@ export function Record(){
                                 onClick={() => {
                                     handleRecording();
                                     innerCircleAnimation.start('empty');
+                                    outerCircleAnimation.start(['bigger', 'medium'], {
+                                        repeat: Infinity,
+                                        repeatType: 'mirror' 
+                                    });
                                 }}
                                 onMouseEnter={() => {
-                                    innerCircleAnimation.start('square')
+                                    if(!isRecording){
+                                        innerCircleAnimation.start('shrink')
+                                        outerCircleAnimation.start('bigger')
+                                    } else {
+                                        innerCircleAnimation.start('square')
+                                    }
                                 }}
                                 onMouseLeave={() => {
                                     if(!isRecording){
                                         innerCircleAnimation.start('circle')
+                                        outerCircleAnimation.start('circle')
                                     } else {
                                         innerCircleAnimation.start('empty')
                                     }
                                 }}
                             >
-                                <div className={btn.circle + ' ' + btn.outerCircle}></div>
+                                <motion.div 
+                                    className={btn.circle + ' ' + btn.outerCircle}
+                                    animate={outerCircleAnimation}
+                                    variants={outerCircleVariants}
+                                />
                                 <motion.div 
                                     className={btn.circle + ' ' + btn.innerCircle}
                                     animate={innerCircleAnimation}
