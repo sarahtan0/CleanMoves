@@ -1,8 +1,7 @@
 import cn from "./Record.module.css"
 import { useRecordWebcam } from 'react-record-webcam'
-import {useEffect, useState, useRef, CSSProperties} from "react"
+import {useEffect, useState, useRef} from "react"
 import ReactPlayer from "react-player"
-import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import {motion, Variants, useAnimation} from 'framer-motion';
 import btn from "./RecordButton.module.css";
 
@@ -18,7 +17,7 @@ export function Record(){
     } = useRecordWebcam();
 
     const [recordingComponent, setRecordingComponent] = useState<any>(null);
-    const [recording, setRecording] = useState(false);
+    const [isRecording, setIsRecording] = useState(false);
     const [finishedRecording, setFinishedRecording] = useState(false);
     const [url, setUrl] = useState('https://www.youtube.com/watch?v=cDQdR6i4W9o');
     const [startTime, setStartTime] = useState(0);
@@ -61,10 +60,10 @@ export function Record(){
     };
 
     const stopVideo = async () => {
-        setFinishedRecording(true);
+        setFinishedRecording(true); // is there a way i can have this update after the animation
         await stopRecording(recordingComponent.id);
+        // await innerCircleAnimation.start('circle');
         setPlaying(false);
-        // await download(recording.id); // Download the recording
         setViewOnly(false);
     }
 
@@ -75,13 +74,13 @@ export function Record(){
     }
 
     const handleRecording = async () => {
-        if(!recording){
+        if(!isRecording){
             recordVideo();
             playAudio();
-            setRecording(true);
+            setIsRecording(true);
         } else {
             stopVideo();
-            setRecording(false);
+            setIsRecording(false);
         }
     }
 
@@ -111,14 +110,17 @@ export function Record(){
             borderRadius: '100%'
         },
         square:{
-            transform: 'scale(0.6)',
-            borderRadius: '30%'
+            transform: 'scale(0.5)',
+            borderRadius: '20%'
+        },
+        empty: {
+            transform: 'scale(0)',
+            borderRadius: '100%'
         }
     }
 
-
     const innerCircleAnimation = useAnimation();
-    const outerCircleAnimation = useAnimation();
+
     return (
         <div>
 
@@ -143,14 +145,19 @@ export function Record(){
                     <div className={cn.recordBtns}>
                         {!finishedRecording && 
                             <div className={btn.container}
-                                onClick={handleRecording}
+                                onClick={() => {
+                                    handleRecording();
+                                    innerCircleAnimation.start('empty');
+                                }}
                                 onMouseEnter={() => {
                                     innerCircleAnimation.start('square')
-                                    outerCircleAnimation.start('thinCircle')
                                 }}
                                 onMouseLeave={() => {
-                                    innerCircleAnimation.start('circle')
-                                    outerCircleAnimation.start('circle')
+                                    if(!isRecording){
+                                        innerCircleAnimation.start('circle')
+                                    } else {
+                                        innerCircleAnimation.start('empty')
+                                    }
                                 }}
                             >
                                 <div className={btn.circle + ' ' + btn.outerCircle}></div>

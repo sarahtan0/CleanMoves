@@ -7,8 +7,7 @@
     height: 100%;
     overflow: 'hidden';
     border-radius: 100%;
-    border: 1px solid white;
-    background-color: rgba(39, 65, 101, 0.1);
+    border: 2px solid red;
 }
 
 .innerCircle {
