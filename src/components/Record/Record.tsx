@@ -1,8 +1,10 @@
 import cn from "./Record.module.css"
 import { useRecordWebcam } from 'react-record-webcam'
-import {useEffect, useState, useRef} from "react"
+import {useEffect, useState, useRef, CSSProperties} from "react"
 import ReactPlayer from "react-player"
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
+import {motion, Variants, useAnimation} from 'framer-motion';
+import btn from "./RecordButton.module.css";
 
 export function Record(){
     const videoRef = useRef<ReactPlayer>(null);
@@ -103,8 +105,23 @@ export function Record(){
         return String(Math.trunc(seconds%60)).padStart(2,'0');
     }
 
+    const innerCircleVariants: Variants = {
+        circle: {
+            transform: 'scale(1)',
+            borderRadius: '100%'
+        },
+        square:{
+            transform: 'scale(0.6)',
+            borderRadius: '30%'
+        }
+    }
+
+
+    const innerCircleAnimation = useAnimation();
+    const outerCircleAnimation = useAnimation();
     return (
         <div>
+
             <div className={cn.topLine}>
                 <input className={cn.url}
                 placeholder="Paste YouTube Link"
@@ -124,10 +141,27 @@ export function Record(){
                         }
                     </div>
                     <div className={cn.recordBtns}>
-                        <button onClick={handleRecording}>
-                            <RadioButtonCheckedIcon style={{color:"red"}}/>
-                        </button>
-                        {finishedRecording && 
+                        {!finishedRecording && 
+                            <div className={btn.container}
+                                onClick={handleRecording}
+                                onMouseEnter={() => {
+                                    innerCircleAnimation.start('square')
+                                    outerCircleAnimation.start('thinCircle')
+                                }}
+                                onMouseLeave={() => {
+                                    innerCircleAnimation.start('circle')
+                                    outerCircleAnimation.start('circle')
+                                }}
+                            >
+                                <div className={btn.circle + ' ' + btn.outerCircle}></div>
+                                <motion.div 
+                                    className={btn.circle + ' ' + btn.innerCircle}
+                                    animate={innerCircleAnimation}
+                                    variants={innerCircleVariants}
+                                />
+                            </div>
+                        }
+                        {finishedRecording &&
                             <button onClick={newVideo}>New Recording</button>
                         }
                     </div>

@@ -85,6 +85,7 @@
     margin-top: 2px;
     display: flex;
     justify-content: space-evenly;
+    align-items: center;
 }
 
 .recordBtns > button, .bookmarkContainer > div > button {
