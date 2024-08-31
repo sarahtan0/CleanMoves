@@ -4,6 +4,7 @@ import {useEffect, useState, useRef} from "react"
 import ReactPlayer from "react-player"
 import {motion, Variants, useAnimation} from 'framer-motion';
 import btn from "./RecordButton.module.css";
+import AutorenewIcon from '@mui/icons-material/Autorenew';
 
 export function Record(){
     const videoRef = useRef<ReactPlayer>(null);
@@ -19,7 +20,7 @@ export function Record(){
     const [recordingComponent, setRecordingComponent] = useState<any>(null);
     const [isRecording, setIsRecording] = useState(false);
     const [finishedRecording, setFinishedRecording] = useState(false);
-    const [url, setUrl] = useState('https://www.youtube.com/watch?v=cDQdR6i4W9o');
+    const [url, setUrl] = useState('https://www.youtube.com/watch?v=ESjayREZIFw');
     const [startTime, setStartTime] = useState(0);
     const [endTime, setEndTime] = useState(0);
     const [playing, setPlaying] = useState(true);
@@ -70,7 +71,7 @@ export function Record(){
     const playAudio = () => {
         videoRef.current?.seekTo(startTime);
         setPlaying(true);
-        setViewOnly(true);
+        // setViewOnly(true);
     }
 
     const handleRecording = async () => {
@@ -88,6 +89,7 @@ export function Record(){
         clearPreview(recordingComponent.id);
         openCamera(recordingComponent.id);
         setFinishedRecording(false);
+        setPlaying(false);
     }
     
     const loadVideo = async () => {
@@ -133,7 +135,7 @@ export function Record(){
             borderRadius: '100%'
         },
         medium: {
-            transform: 'scale(1.1)',
+            transform: 'scale(1.2)',
             borderRadius: '100%'
         }
     }
@@ -203,7 +205,12 @@ export function Record(){
                             </div>
                         }
                         {finishedRecording &&
-                            <button onClick={newVideo}>New Recording</button>
+                            <button onClick={newVideo} style={{padding:"10px"}}>
+                                <div className={cn.newBtn}>
+                                    <AutorenewIcon/>
+                                    <p>New Recording</p>
+                                </div>
+                            </button>
                         }
                     </div>
                 </div>

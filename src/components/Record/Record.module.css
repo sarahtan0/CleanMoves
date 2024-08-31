@@ -93,3 +93,15 @@
     background-color: white;
     color: var(--txt);
 }
+
+.newBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    gap: 10px;
+}
+
+.newBtn > p {
+    margin: 0;
+}

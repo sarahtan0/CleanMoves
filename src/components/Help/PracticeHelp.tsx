@@ -83,7 +83,7 @@ export function PracticeHelp({setOpen}: PracticeHelpProps){
 
                         <CustomAccordion title={<h2>Countdown</h2>}>
                             <div className={cn.function}>
-                                <p>Set the countdown time from 1 to 10 seconds and click 'Start Countdown' to immediately
+                                <p className={cn.caption}>Set the countdown time from 1 to 10 seconds and click 'Start Countdown' to immediately
                                     start counting down.</p> 
                                 <img width={"40%"} src="images/countdown.png"></img>
 
@@ -92,14 +92,14 @@ export function PracticeHelp({setOpen}: PracticeHelpProps){
 
                         <CustomAccordion title={<h2>Speed</h2>}>
                             <div className={cn.function}> 
-                                <p>Clicking each number will change the video speed to that respective value.</p>
+                                <p className={cn.caption}>Clicking each number will change the video speed to that respective value.</p>
                                 <img width={"40%"} src="images/speed.png"></img>
                             </div>
                         </CustomAccordion>
 
                         <CustomAccordion title={<h2>Loop</h2>}>
                             <div className={cn.function}> 
-                                <p>Click the bookmark buttons while the video player timestamp is at the time you want to
+                                <p className={cn.caption}>Click the bookmark buttons while the video player timestamp is at the time you want to
                                     start or end the the loop at and click the 'Start' or 'End' bookmarks. Once you
                                     check the box next to 'Loop' your video will only play within those timestamps.
                                 </p>
@@ -110,7 +110,7 @@ export function PracticeHelp({setOpen}: PracticeHelpProps){
 
                         <CustomAccordion title={<h2>Skip Interval</h2>}>
                             <div className={cn.function}> 
-                                <p>Drag the slider to determine how many seconds the arrow keys skip the video by.</p>
+                                <p className={cn.caption}>Drag the slider to determine how many seconds the arrow keys skip the video by.</p>
                                 <img width={"40%"} src="images/skip.png"></img>
                                 
                             </div>
