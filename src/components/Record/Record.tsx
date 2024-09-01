@@ -65,7 +65,7 @@ export function Record(){
     const stopVideo = async () => {
         setFinishedRecording(true); // is there a way i can have this update after the animation
         await stopRecording(recordingComponent.id);
-        // await innerCircleAnimation.start('circle');
+        await innerCircleAnimation.start('circle');
         setPlaying(false);
         setViewOnly(false);
     }
@@ -78,18 +78,19 @@ export function Record(){
 
     const handleRecording = async () => {
         if(!isRecording){
+            setIsRecording(true);
             recordVideo();
             playAudio();
-            setIsRecording(true);
         } else {
-            stopVideo();
             setIsRecording(false);
+            stopVideo();
         }
     }
 
     const newVideo = () => {
         clearPreview(recordingComponent.id);
         openCamera(recordingComponent.id);
+        setIsRecording(false);
         setFinishedRecording(false);
         setPlaying(false);
     }
@@ -145,6 +146,7 @@ export function Record(){
     const innerCircleAnimation = useAnimation();
     const outerCircleAnimation = useAnimation();
 
+    console.log(isRecording);
     return (
         <div>
 
@@ -235,7 +237,7 @@ export function Record(){
                     </div>
                     <div className={cn.bookmarkContainer}>
                         <div className={cn.startContainer}>
-                            <h4 style={{whiteSpace: "nowrap", margin: "0px 0px 10px 0px"}}>Start Time</h4>
+                            <h4 style={{whiteSpace: "nowrap", margin: "0px 0px 3px 0px"}}>Start Time</h4>
                             <div style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
                                 <button className={cn.transparentBtn} onClick={()=>setStartTime(videoRef.current?.getCurrentTime()??0)}>
                                     <FontAwesomeIcon icon={faBookmark}/>
@@ -249,7 +251,7 @@ export function Record(){
                         </div>
                         <div>
                             <div className={cn.endContainer}>
-                                <h4 style={{whiteSpace: "nowrap", margin: "0px 0px 10px 0px"}}>End Time</h4>
+                                <h4 style={{whiteSpace: "nowrap", margin: "0px 0px 3px 0px"}}>End Time</h4>
                                 <div style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
                                 <button className={cn.transparentBtn} onClick={()=>setEndTime(videoRef.current?.getCurrentTime()??0)}>
                                     <FontAwesomeIcon icon={faBookmark}/>

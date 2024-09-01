@@ -2,15 +2,19 @@ import nav from "./Navbar.module.css"
 import { NavLink, useLocation } from 'react-router-dom'
 import { useState, useEffect } from "react"
 import { PracticeHelp } from "../Help/PracticeHelp"
+import { RecordHelp } from "../Help/RecordHelp";
 
 export function Navbar(){
     const [currPage, setCurrPage] = useState("");
     const [pracHelpOpen, setPracHelpOpen] = useState(false);
+    const [recHelpOpen, setRecHelpOpen] = useState(false);
     let location = useLocation();
 
     const help = () => {
         if(currPage == "/practice"){
             setPracHelpOpen(!pracHelpOpen);
+        } else if (currPage == "/record") {
+            setRecHelpOpen(!recHelpOpen);
         }
         //add another for record screen
     }
@@ -22,6 +26,8 @@ export function Navbar(){
                 case "h":
                     if(currPage == "/practice" || currPage == "/") {
                         setPracHelpOpen(prev => !prev);
+                    } else if (currPage == "/record") {
+                        setRecHelpOpen(prev => !prev);
                     }
                     break;
                 default:
@@ -54,6 +60,10 @@ export function Navbar(){
             {pracHelpOpen && 
                 <PracticeHelp 
                     setOpen = {setPracHelpOpen}    
+                />
+            }
+            {recHelpOpen &&
+                <RecordHelp
                 />
             }
         </div>
