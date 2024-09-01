@@ -5,6 +5,8 @@ import ReactPlayer from "react-player"
 import {motion, Variants, useAnimation} from 'framer-motion';
 import btn from "./RecordButton.module.css";
 import AutorenewIcon from '@mui/icons-material/Autorenew';
+import { faBookmark } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export function Record(){
     const videoRef = useRef<ReactPlayer>(null);
@@ -232,23 +234,31 @@ export function Record(){
                         />
                     </div>
                     <div className={cn.bookmarkContainer}>
-                        <div>
-                            <button onClick={()=>setStartTime(videoRef.current?.getCurrentTime()??0)}>START</button>
-                            <div className={cn.timestamp}>
-                                <div className={cn.numberOutline}>
-                                    {convertToMin(startTime)}
-                                    {' ' + ':' + ' '}
-                                    {convertToSec(startTime)}
-                                </div>
+                        <div className={cn.startContainer}>
+                            <h4 style={{whiteSpace: "nowrap", margin: "0px 0px 10px 0px"}}>Start Time</h4>
+                            <div style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
+                                <button className={cn.transparentBtn} onClick={()=>setStartTime(videoRef.current?.getCurrentTime()??0)}>
+                                    <FontAwesomeIcon icon={faBookmark}/>
+                                </button>
+                                    <div className={cn.numberOutline}>
+                                        {convertToMin(startTime)}
+                                        {' ' + ':' + ' '}
+                                        {convertToSec(startTime)}
+                                    </div>
                             </div>
                         </div>
                         <div>
-                            <button onClick={()=>setEndTime(videoRef.current?.getCurrentTime()??0)}>END</button>
-                            <div className={cn.timestamp}>
-                                <div className={cn.numberOutline}>
-                                    {convertToMin(endTime)}
-                                    {' ' + ':' + ' '}
-                                    {convertToSec(endTime)}
+                            <div className={cn.endContainer}>
+                                <h4 style={{whiteSpace: "nowrap", margin: "0px 0px 10px 0px"}}>End Time</h4>
+                                <div style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
+                                <button className={cn.transparentBtn} onClick={()=>setEndTime(videoRef.current?.getCurrentTime()??0)}>
+                                    <FontAwesomeIcon icon={faBookmark}/>
+                                </button>
+                                    <div className={cn.numberOutline}>
+                                        {convertToMin(endTime)}
+                                        {' ' + ':' + ' '}
+                                        {convertToSec(endTime)}
+                                    </div>
                                 </div>
                             </div>
                         </div>

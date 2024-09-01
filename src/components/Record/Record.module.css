@@ -3,7 +3,7 @@
     --white: #ebf4f7;
     --txt: #3e4f57;
     --shadow: #587682;
-    --shadow2: #9cb2ba;
+    --shadow2: #edf3f5;
   }
 
 .url{
@@ -61,21 +61,16 @@
     gap: 10px;
 }
 
-.timestamp{
-    display: flex;
-    align-items: center;
-}
-
 .numberOutline {
     white-space: nowrap;
     text-align: center;
-    background-color: white;
+    background-color: var(--shadow2);
     padding: 8px;
-    border-radius: 10px;
+    border-radius: 4px;
     margin-left: 5px;
     margin-right: 5px;
     font-weight: 500;
-    color: black;
+    color: var(--txt);
 }
 
 .viewOnly {
@@ -104,4 +99,16 @@
 
 .newBtn > p {
     margin: 0;
+}
+
+.startContainer, .endContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.transparentBtn {
+    background-color: transparent;
+    padding: 8px;
 }
