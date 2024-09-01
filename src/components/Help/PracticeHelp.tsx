@@ -116,7 +116,7 @@ export function PracticeHelp({setOpen}: PracticeHelpProps){
                             </div>
                         </CustomAccordion>
                 </div>
-                    }
+                }
             </div>
         </div>
        </div>

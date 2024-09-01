@@ -2,7 +2,7 @@ import nav from "./Navbar.module.css"
 import { NavLink, useLocation } from 'react-router-dom'
 import { useState, useEffect } from "react"
 import { PracticeHelp } from "../Help/PracticeHelp"
-import { RecordHelp } from "../Help/RecordHelp";
+import { RecordHelp } from "../Help/RecordHelp"
 
 export function Navbar(){
     const [currPage, setCurrPage] = useState("");
@@ -63,8 +63,7 @@ export function Navbar(){
                 />
             }
             {recHelpOpen &&
-                <RecordHelp
-                />
+                <RecordHelp/>
             }
         </div>
     );
