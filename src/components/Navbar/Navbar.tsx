@@ -21,6 +21,10 @@ export function Navbar(){
     
     useEffect(() => {
         setCurrPage(location.pathname);
+        if(currPage!="/record"){
+            setRecHelpOpen(false);
+        }
+
         const handleKeyDown = (event: KeyboardEvent) => {
             switch(event.key){
                 case "h":
@@ -34,12 +38,16 @@ export function Navbar(){
                     break;
             }
         }
+
         document.addEventListener("keydown", handleKeyDown);
 
         return () => {
             document.removeEventListener("keydown", handleKeyDown);
         }
     }, [location, currPage, pracHelpOpen])
+    console.log(currPage);
+    console.log("pracopen" + " " + pracHelpOpen);
+    console.log("recopen" + " " +recHelpOpen);
 
     return (
         <div>

@@ -146,7 +146,6 @@ export function Record(){
     const innerCircleAnimation = useAnimation();
     const outerCircleAnimation = useAnimation();
 
-    console.log(isRecording);
     return (
         <div>
 
