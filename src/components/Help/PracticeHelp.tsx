@@ -207,6 +207,9 @@ export function PracticeHelp({setOpen}: PracticeHelpProps){
                                 </p>
                             </div>
                         </div>
+
+                        <div style={{height: "30px"}}>
+                        </div>
                     </div>
                 }
             </div>
