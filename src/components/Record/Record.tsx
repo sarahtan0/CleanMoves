@@ -42,7 +42,6 @@ export function Record(){
     }, []);
 
     videoElement?.addEventListener("play", () => {
-        console.log(videoElement.currentTime);
         videoRef.current?.seekTo((startTime + videoElement.currentTime), "seconds");
         setPlaying(true);
     })
@@ -63,6 +62,9 @@ export function Record(){
     };
 
     const stopVideo = async () => {
+        if(isRecording){
+            // stop the promise if it is recording
+        }
         setFinishedRecording(true); // is there a way i can have this update after the animation
         await stopRecording(recordingComponent.id);
         await innerCircleAnimation.start('circle');
@@ -73,7 +75,7 @@ export function Record(){
     const playAudio = () => {
         videoRef.current?.seekTo(startTime);
         setPlaying(true);
-        // setViewOnly(true);
+        setViewOnly(true);
     }
 
     const handleRecording = async () => {
@@ -148,7 +150,6 @@ export function Record(){
 
     return (
         <div>
-
             <div className={cn.topLine}>
                 <input className={cn.url}
                 placeholder="Paste YouTube Link"

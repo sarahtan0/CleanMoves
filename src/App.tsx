@@ -12,6 +12,7 @@ function App() {
       <Navbar />  
       <Routes>
         <Route path="/" element={<VideoPlayer />} />
+        <Route path="" element={<VideoPlayer />} />
         <Route path="/practice" element={<VideoPlayer />} />
         <Route path="/record" element={<Record />} />
       </Routes>

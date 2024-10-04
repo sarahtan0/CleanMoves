@@ -33,6 +33,7 @@ export const useVideoPlayerData = (videoRef : React.RefObject<ReactPlayer>) => {
   const seekSecondsRef = useRef(seekSeconds);
   const [timeoutId, addTimeoutId] = useState<number[]>([]);
   const timeoutRef = useRef<number | null> (null);
+  const [zoom, setZoom] = useState(1);
 
   // seeks to that % of the video
   function seek(time : number){
@@ -85,17 +86,21 @@ export const useVideoPlayerData = (videoRef : React.RefObject<ReactPlayer>) => {
   const handleMouseHover = () => {
     setShowTimeline(true);
 
-        // checks if there's an existing timeoutRef (a previous mouse movement in the player div)
-        // replaces it so there's no overlapping refs and the setTimeout function doesn't stack
-        if(timeoutRef.current){
-            clearTimeout(timeoutRef.current);
-        }
+      // checks if there's an existing timeoutRef (a previous mouse movement in the player div)
+      // replaces it so there's no overlapping refs and the setTimeout function doesn't stack
+      if(timeoutRef.current){
+          clearTimeout(timeoutRef.current);
+      }
 
-        // waits 3 seconds before hiding the controls again
-        timeoutRef.current = setTimeout(() => {
-            setShowTimeline(false);
-            }, 3000);
-    }
+      // waits 3 seconds before hiding the controls again
+      timeoutRef.current = setTimeout(() => {
+          setShowTimeline(false);
+          }, 3000);
+  }
+
+  const handleZoom = () => {
+    
+  }
 
   // changes isFullScreen when user presses escape from fullscreen mode
   useEffect(() => {
@@ -216,6 +221,8 @@ export const useVideoPlayerData = (videoRef : React.RefObject<ReactPlayer>) => {
     volumeIcon,
     handleProgress,
     handleMouseHover,
+    setZoom,
+    zoom
   };
 
 }

@@ -45,6 +45,8 @@ export function VideoPlayer(){
     volumeIcon,
     handleProgress,
     handleMouseHover,
+    zoom,
+    setZoom
   } = useVideoPlayerData(videoRef);
 
   return (
@@ -204,6 +206,8 @@ export function VideoPlayer(){
           setSeekSeconds={setSeekSeconds}
           play={playing}
           seekSeconds={seekSeconds}
+          zoom={zoom}
+          setZoom={setZoom}
         />
       </div>
       }

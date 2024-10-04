@@ -36,11 +36,13 @@ type VideoSettingsProps = {
     duration : number;
     setCountdownSecond : Dispatch<SetStateAction<number>>;
     addTimeoutId : Dispatch<SetStateAction<number[]>>; 
+    setZoom : Dispatch<SetStateAction<number>>;
+    zoom : number;
 }
 
 export function VideoSettings({setOpenModal, currSpeed, setCurrSpeed, isLooped, setIsLooped,
     countdownTime, setCountdownTime, setIsCountingDown, setPlay, isFullScreen, setEndTime, setStartTime, startMin, startSec, endMin, endSec, setStartMin, setStartSec,
-    setEndMin, setEndSec, setSeekSeconds, seekSeconds, currTime, duration, setCountdownSecond, addTimeoutId} : VideoSettingsProps) {
+    setEndMin, setEndSec, setSeekSeconds, seekSeconds, currTime, duration, setCountdownSecond, addTimeoutId, setZoom, zoom} : VideoSettingsProps) {
     
     const minRef = useRef(0);
     const secRef = useRef(0);
@@ -51,6 +53,10 @@ export function VideoSettings({setOpenModal, currSpeed, setCurrSpeed, isLooped, 
 
     function compareSpeed (checkSpeed : number) {
         return currSpeed == checkSpeed;
+    }
+
+    function compareZoom(checkZoom : number) {
+        return zoom == checkZoom;
     }
 
     function countingDown() {
@@ -121,8 +127,6 @@ export function VideoSettings({setOpenModal, currSpeed, setCurrSpeed, isLooped, 
         }
     }
 
-    
-
     return (
         <div className={settings.background + ' ' + (isFullScreen && settings.fullscreen)}>
             <div className={settings.container}>
@@ -158,6 +162,22 @@ export function VideoSettings({setOpenModal, currSpeed, setCurrSpeed, isLooped, 
                                 onClick={() => setCurrSpeed(.75)}> 0.75 </button>
                             <button className={' ' + (compareSpeed(1) ? settings.selected : settings.unselected)} id={settings.rightSpeed}
                                 onClick={() => setCurrSpeed(1)}> 1 </button>
+
+                        </div>
+                        
+                    </div>
+                    <hr></hr>
+                    <div className={settings.speed + ' ' + settings.section}>
+                            <h4>Zoom</h4>
+                        <div className={settings.speeds}>
+                            <button className={' ' + (compareZoom(1) ? settings.selected : settings.unselected)}
+                                 id={settings.leftSpeed} onClick={() => setZoom(1)}> 1x </button>
+                            <button className={' ' + (compareZoom(1.5) ? settings.selected : settings.unselected)} 
+                                onClick={() => setZoom(1.5)} id={settings.speedOption}> 1.5x </button>
+                            <button className={' ' + (compareZoom(1.75) ? settings.selected : settings.unselected)} 
+                                onClick={() => setZoom(1.75)} id={settings.speedOption}> 1.75x </button>
+                            <button className={' ' + (compareZoom(2) ? settings.selected : settings.unselected)} 
+                                onClick={() => setZoom(2)} id={settings.speedOption}> 2x </button>
 
                         </div>
                         
