@@ -99,7 +99,7 @@ export const useVideoPlayerData = (videoRef : React.RefObject<ReactPlayer>) => {
   }
 
   const handleZoom = () => {
-    
+    return 150 * zoom;
   }
 
   // changes isFullScreen when user presses escape from fullscreen mode

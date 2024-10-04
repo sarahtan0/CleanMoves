@@ -71,31 +71,33 @@ export function VideoPlayer(){
           setShowVolume(false);
         }}
         onClick={()=>setPlaying(!playing)}>
-        
-        <ReactPlayer 
-          onReady={() => {
-            const dur = (videoRef.current?.getDuration() ?? 0) - 1;
-            setPlaying(false);
-            setDuration(dur);
-            setStartMin(0);
-            setStartSec(0);
-            setEndSeconds(dur);
-            setEndMin(Math.trunc(dur/60));
-            setEndSec(Math.floor((dur%60)));
-          }}
-          className={vid.player}
-          url = {url}
-          controls={ false }
-          width= {isFullScreen ? "100vw" : "68vw"}
-          height={"150vh"}
-          playbackRate={currSpeed}
-          light={ false } 
-          style={{ pointerEvents: "none" }}
-          playing={ playing }
-          onProgress={(vals) => handleProgress(vals)}
-          ref={ videoRef }
-          volume={isMuted ? 0 : volume/100}
-        />
+        <div style={{transform: `scale(${zoom})`}}>
+
+          <ReactPlayer
+            onReady={() => {
+              const dur = (videoRef.current?.getDuration() ?? 0) - 1;
+              setPlaying(false);
+              setDuration(dur);
+              setStartMin(0);
+              setStartSec(0);
+              setEndSeconds(dur);
+              setEndMin(Math.trunc(dur/60));
+              setEndSec(Math.floor((dur%60)));
+            }}
+            className={vid.player}
+            url = {url}
+            controls={ false }
+            width= {isFullScreen ? "100vw" : "68vw"}
+            height={"150vh"}
+            playbackRate={currSpeed}
+            light={ false } 
+            style={{ pointerEvents: "none" }}
+            playing={ playing }
+            onProgress={(vals) => handleProgress(vals)}
+            ref={ videoRef }
+            volume={isMuted ? 0 : volume/100}
+          />
+        </div>
       </div>
 
       {showTimeline && 

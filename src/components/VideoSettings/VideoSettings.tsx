@@ -177,7 +177,7 @@ export function VideoSettings({setOpenModal, currSpeed, setCurrSpeed, isLooped, 
                             <button className={' ' + (compareZoom(1.75) ? settings.selected : settings.unselected)} 
                                 onClick={() => setZoom(1.75)} id={settings.speedOption}> 1.75x </button>
                             <button className={' ' + (compareZoom(2) ? settings.selected : settings.unselected)} 
-                                onClick={() => setZoom(2)} id={settings.speedOption}> 2x </button>
+                                onClick={() => setZoom(2)} id={settings.rightSpeed}> 2x </button>
 
                         </div>
                         
