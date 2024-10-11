@@ -39,11 +39,12 @@
 }
 
 #close{
+    background-color: var(--white); 
+    height: 10%;
     color: var(--txt);
-    position: absolute;
+    /* position: absolute;
     right: 0%;
-    top: 0%;
-    background-color: transparent;
+    top: 0%; */
 }
 
 .countdown{
