@@ -129,12 +129,12 @@ export function VideoSettings({setOpenModal, currSpeed, setCurrSpeed, isLooped, 
 
     return (
         <div className={settings.background + ' ' + (isFullScreen && settings.fullscreen)}>
+            <button onClick={() => setOpenModal(false)} id={settings.close}>
+                <FontAwesomeIcon icon={faXmark} />
+            </button>
             <div className={settings.container}>
                 <div className={settings.title}>
                     <h2>Settings</h2>
-                    <button onClick={() => setOpenModal(false)} id={settings.close}>
-                        <FontAwesomeIcon icon={faXmark} />
-                    </button>
                 </div>
                 <div className={settings.body}>
                     
