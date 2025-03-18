@@ -23,7 +23,7 @@
   }
   
 .navBar a{
-    padding: 22px;
+    padding: 1vw;
     color: var(--txt);
   }
   
@@ -38,4 +38,13 @@
 .navList > li{
   list-style-type: none;
   display: inline-block;
+}
+
+#help:hover{
+  cursor:pointer;
+  color: gray;
+}
+#help{
+  margin-right: 1vh;
+  margin-left: 1vh;
 }

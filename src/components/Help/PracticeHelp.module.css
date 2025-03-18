@@ -143,3 +143,8 @@ img {
     display: grid;
     grid-template-columns: .7fr .3fr;
 }
+
+.unselected:hover{
+    background-color: #9bc2d1;
+    cursor: pointer;
+}

@@ -2,6 +2,8 @@ import vid from './VideoPlayer.module.css'
 import controls from './Controls.module.css';
 import {useRef} from "react";
 import ReactPlayer from "react-player";
+
+
 import {VideoSettings} from "../VideoSettings/VideoSettings";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faGear, faPlay, faPause, faExpand, faCompress} from "@fortawesome/free-solid-svg-icons"
@@ -57,11 +59,15 @@ export function VideoPlayer(){
           </div>
       }
       {!isFullScreen &&
-        <div style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
+        <div style={{gap: "2vw", display: "flex", alignItems: "center", justifyContent: "center", marginBottom:"20px"}}>
             <input id={vid.url} onChange={e => {
                 setURL(e.target.value)
                 setPlaying(false)}}
                 placeholder="Paste YouTube Link"></input>
+            {/* <div style={{gap:"0.5vw", display: "flex"}}>
+              <button> SAVE</button>
+              <button> LOAD </button>
+            </div> */}
         </div>
       }
       <div className={vid.playerWrapper + ' ' + (inverted && vid.invert) + ' ' + (isFullScreen && vid.fullscreen)} 
@@ -72,7 +78,6 @@ export function VideoPlayer(){
         }}
         onClick={()=>setPlaying(!playing)}>
         <div style={{transform: `scale(${zoom})`}}>
-
           <ReactPlayer
             onReady={() => {
               const dur = (videoRef.current?.getDuration() ?? 0) - 1;

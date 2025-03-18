@@ -37,6 +37,7 @@
     user-select: none;
 }
 
+
 .container{
     position: relative;
 }
@@ -102,5 +103,4 @@
     font-weight: bold;
     width: 50%;
     box-shadow: 3px 3px var(--shadow2);
-    margin-bottom: 20px;
   }

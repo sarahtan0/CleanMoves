@@ -9,5 +9,5 @@
 body{
   display: flex;
   justify-content: center;
-  background-image: linear-gradient(#b1def0, #dae8ed) ;
+  background-image: linear-gradient(#b1def0, #dae8ed);
 }
