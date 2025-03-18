@@ -24,6 +24,13 @@
     background: transparent;
     padding: 0px 15px 0px 15px;
     border-radius: 200px;
+    margin-left: 0.3vw;
+
+}
+
+#closeBtn:hover{
+    background:rgba(0, 0, 0, 0.1);
+    border-color: rgba(0,0,0,0.1);
 }
 
 .container {

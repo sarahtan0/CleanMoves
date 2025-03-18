@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { PracticeHelp } from "../Help/PracticeHelp"
 import { RecordHelp } from "../Help/RecordHelp"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
+import { faCircleQuestion, faVideo } from '@fortawesome/free-solid-svg-icons';
 
 export function Navbar(){
     const [currPage, setCurrPage] = useState("");
@@ -60,13 +60,12 @@ export function Navbar(){
                         <NavLink to="/practice">Practice</NavLink>
                     </li>
                     <li>
-                        <NavLink to="/record">Record</NavLink>
+                        <NavLink to="/record"> Record </NavLink>
                     </li>
                     <li>
                         <div id={nav.help}>
                             <FontAwesomeIcon onClick={help} icon={faCircleQuestion}/>
                         </div>
-                        {/* <a onClick={help}>?</a> */}
                     </li>
                 </ol>
             </div>

@@ -1,6 +1,6 @@
 import cn from "./PracticeHelp.module.css"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark, faCaretRight, faCaretLeft } from '@fortawesome/free-solid-svg-icons';
+import { faXmark, faCaretRight, faCaretLeft} from '@fortawesome/free-solid-svg-icons';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
