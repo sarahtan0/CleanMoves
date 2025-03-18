@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { PracticeHelp } from "../Help/PracticeHelp"
 import { RecordHelp } from "../Help/RecordHelp"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleQuestion, faVideo } from '@fortawesome/free-solid-svg-icons';
+import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
 
 export function Navbar(){
     const [currPage, setCurrPage] = useState("");
