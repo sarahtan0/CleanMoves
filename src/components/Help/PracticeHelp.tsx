@@ -6,7 +6,6 @@ import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import mirror from "images/mirror.png";
 
 type PracticeHelpProps = {
     setOpen: Dispatch<SetStateAction<boolean>>;
@@ -109,7 +108,7 @@ export function PracticeHelp({setOpen}: PracticeHelpProps){
                                         <li>The 'Mirror' button will flip your video horizontally so you can learn whichever way feels best</li>
                                         <li>The gear opens a pop up screen that contains all the features of this site</li>
                                     </ul>
-                                    <img width={"40%"} src={mirror}></img>
+                                    <img width={"40%"} src="/images/mirror.png"></img>
 
                                 </div>
                             </CustomAccordion>
