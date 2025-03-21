@@ -6,6 +6,10 @@
     --shadow2: #9cb2ba;
   }
 
+body {
+    overflow: hidden;
+}
+
 .invert{
     transform: scaleX(-1);
 }
