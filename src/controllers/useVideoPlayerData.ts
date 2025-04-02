@@ -34,8 +34,10 @@ export const useVideoPlayerData = (videoRef : React.RefObject<ReactPlayer>) => {
   const [timeoutId, addTimeoutId] = useState<number[]>([]);
   const timeoutRef = useRef<number | null> (null);
   const [zoom, setZoom] = useState(1);
+  const [validUrl, setValidUrl] = useState(false);
 
   // seeks to that % of the video
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   function seek(time : number){
     if(videoRef.current && videoRef.current?.seekTo){
       setCurrTime(time);
@@ -181,11 +183,13 @@ export const useVideoPlayerData = (videoRef : React.RefObject<ReactPlayer>) => {
         timeoutId.forEach(timeout => clearTimeout(timeout));
       }
 
+      const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/(watch\?v=|embed\/|v\/|.+\?v=)?([A-Za-z0-9_-]{11})/;
+      setValidUrl(youtubeRegex.test(url));
     return () => {
       document.removeEventListener("fullscreenchange", onFullScreenChange);
       document.removeEventListener("keydown", handleKeyDown);
     }
-  }, [timeoutId, seekSeconds, isCountingDown, playing, videoRef])
+  }, [timeoutId, seekSeconds, isCountingDown, playing, videoRef, url, seek])
 
   return {
     url,setURL,
@@ -218,7 +222,8 @@ export const useVideoPlayerData = (videoRef : React.RefObject<ReactPlayer>) => {
     handleProgress,
     handleMouseHover,
     setZoom,
-    zoom
+    zoom,
+    validUrl
   };
 
 }

@@ -48,7 +48,8 @@ export function VideoPlayer(){
     handleProgress,
     handleMouseHover,
     zoom,
-    setZoom
+    setZoom,
+    validUrl
   } = useVideoPlayerData(videoRef);
 
   return (
@@ -64,46 +65,53 @@ export function VideoPlayer(){
                 setURL(e.target.value)
                 setPlaying(false)}}
                 placeholder="Paste YouTube Link"></input>
-            {/* <div style={{gap:"0.5vw", display: "flex"}}>
+            <div style={{gap:"0.5vw", display: "flex"}}>
               <button> SAVE</button>
               <button> LOAD </button>
-            </div> */}
+            </div>
         </div>
       }
-      <div className={vid.playerWrapper + ' ' + (inverted && vid.invert) + ' ' + (isFullScreen && vid.fullscreen)} 
-        onMouseMove={()=> handleMouseHover()} 
-        onMouseLeave={()=>{
-          setShowTimeline(false);
-          setShowVolume(false);
-        }}
-        onClick={()=>setPlaying(!playing)}>
-        <div style={{transform: `scale(${zoom})`}}>
-          <ReactPlayer
-            onReady={() => {
-              const dur = (videoRef.current?.getDuration() ?? 0) - 1;
-              setPlaying(false);
-              setDuration(dur);
-              setStartMin(0);
-              setStartSec(0);
-              setEndSeconds(dur);
-              setEndMin(Math.trunc(dur/60));
-              setEndSec(Math.floor((dur%60)));
-            }}
-            className={vid.player}
-            url = {url}
-            controls={ false }
-            width= {isFullScreen ? "100vw" : "68vw"}
-            height={"150vh"}
-            playbackRate={currSpeed}
-            light={ false } 
-            style={{ pointerEvents: "none" }}
-            playing={ playing }
-            onProgress={(vals) => handleProgress(vals)}
-            ref={ videoRef }
-            volume={isMuted ? 0 : volume/100}
-          />
+      {validUrl ? (
+        <div className={vid.playerWrapper + ' ' + (inverted && vid.invert) + ' ' + (isFullScreen && vid.fullscreen)} 
+          onMouseMove={()=> handleMouseHover()} 
+          onMouseLeave={()=>{
+            setShowTimeline(false);
+            setShowVolume(false);
+          }}
+          onClick={()=>setPlaying(!playing)}>
+          <div style={{transform: `scale(${zoom})`}}>
+            <ReactPlayer
+              onReady={() => {
+                const dur = (videoRef.current?.getDuration() ?? 0) - 1;
+                setPlaying(false);
+                setDuration(dur);
+                setStartMin(0);
+                setStartSec(0);
+                setEndSeconds(dur);
+                setEndMin(Math.trunc(dur/60));
+                setEndSec(Math.floor((dur%60)));
+              }}
+              className={vid.player}
+              url = {url}
+              controls={ false }
+              width= {isFullScreen ? "100vw" : "68vw"}
+              height={"150vh"}
+              playbackRate={currSpeed}
+              light={ false } 
+              style={{ pointerEvents: "none" }}
+              playing={ playing }
+              onProgress={(vals) => handleProgress(vals)}
+              ref={ videoRef }
+              volume={isMuted ? 0 : volume/100}
+            />
+          </div>
         </div>
-      </div>
+      ) : (
+          <div className={vid.playerWrapper}>
+            <p style={{ textAlign: "center" }}>ts not valid</p>
+          </div>
+        )
+      }
 
       {showTimeline && 
         <div className={vid.overlay} onMouseEnter={()=> setShowTimeline(true)} onMouseLeave={() => {setShowTimeline(false); setShowVolume(false);}}>
