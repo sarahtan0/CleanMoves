@@ -155,7 +155,7 @@ export function VideoSettings({setOpenModal, currSpeed, setCurrSpeed, isLooped, 
                         <h4>Speed</h4>
                         <h5>Custom: {currSpeed} </h5>
                         <div>
-                            <Slider max={2} min={0} aria-label="Volume" value={currSpeed} step={0.05} onChange={(e,v) => {
+                            <Slider max={2} min={0} aria-label="Speed" value={currSpeed} step={0.05} onChange={(_,v) => {
                                 setCurrSpeed((v as number));
                             }}
                             sx={{
