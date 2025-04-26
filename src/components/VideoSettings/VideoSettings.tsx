@@ -152,7 +152,27 @@ export function VideoSettings({setOpenModal, currSpeed, setCurrSpeed, isLooped, 
                     </div>
                     <hr></hr>
                     <div className={settings.speed + ' ' + settings.section}>
-                            <h4>Speed</h4>
+                        <h4>Speed</h4>
+                        <h5>Custom: {currSpeed} </h5>
+                        <div>
+                            <Slider max={2} min={0} aria-label="Volume" value={currSpeed} step={0.05} onChange={(e,v) => {
+                                setCurrSpeed((v as number));
+                            }}
+                            sx={{
+                                color: '#FFFFFF',
+                                '& .MuiSlider-track': {
+                                    border: 'none',
+                                    color: '#9cb2ba'
+                                },
+                                '& .MuiSlider-thumb': {
+                                    color: '#FFFFFF', 
+                                },
+                                '& .MuiSlider-rail': {
+                                    color: '#CCCCCC', 
+                                },
+                                }}
+                            />
+                        </div>
                         <div className={settings.speeds}>
                             <button className={' ' + (compareSpeed(0.25) ? settings.selected : settings.unselected)} id={settings.leftSpeed} 
                                 onClick={() => setCurrSpeed(.25)}> 0.25 </button>
