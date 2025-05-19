@@ -49,7 +49,7 @@ export function VideoPlayer(){
     handleMouseHover,
     zoom,
     setZoom,
-    validUrl
+    validUrl,
   } = useVideoPlayerData(videoRef);
 
   return (
@@ -65,10 +65,10 @@ export function VideoPlayer(){
                 setURL(e.target.value)
                 setPlaying(false)}}
                 placeholder="Paste YouTube Link"></input>
-            <div style={{gap:"0.5vw", display: "flex"}}>
+            {/* <div style={{gap:"0.5vw", display: "flex"}}>
               <button> SAVE</button>
               <button> LOAD </button>
-            </div>
+            </div> */}
         </div>
       }
       {validUrl ? (
@@ -94,8 +94,8 @@ export function VideoPlayer(){
               className={vid.player}
               url = {url}
               controls={ false }
-              width= {isFullScreen ? "100vw" : "68vw"}
-              height={"150vh"}
+              height = {isFullScreen ? "150vh" : "102vh"}
+              width = {isFullScreen ? "100vw" : "68vw"}
               playbackRate={currSpeed}
               light={ false } 
               style={{ pointerEvents: "none" }}

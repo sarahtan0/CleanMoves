@@ -99,7 +99,6 @@ export const useVideoPlayerData = (videoRef : React.RefObject<ReactPlayer>) => {
           setShowTimeline(false);
           }, 3000);
   }
-
   // changes isFullScreen when user presses escape from fullscreen mode
   useEffect(() => {
     const onFullScreenChange = () => document.fullscreenElement ? setIsFullScreen(true) : setIsFullScreen(false);
@@ -223,7 +222,8 @@ export const useVideoPlayerData = (videoRef : React.RefObject<ReactPlayer>) => {
     handleMouseHover,
     setZoom,
     zoom,
-    validUrl
+    validUrl,
+
   };
 
 }
