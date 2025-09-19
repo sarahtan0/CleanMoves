@@ -10,7 +10,7 @@ export function Navbar(){
     const [currPage, setCurrPage] = useState("");
     const [pracHelpOpen, setPracHelpOpen] = useState(false);
     const [recHelpOpen, setRecHelpOpen] = useState(false);
-    let location = useLocation();
+    const location = useLocation();
 
     const help = () => {
         if(currPage == "/practice" || currPage == "/"){
